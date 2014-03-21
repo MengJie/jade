@@ -4,6 +4,9 @@
     <Filter Include="lua">
       <UniqueIdentifier>{8801decc-9eab-413f-870e-ffdcd873ddbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{fe6ffc9d-57a9-49fd-8022-70c49e1cc316}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\lua\lua.hpp">
@@ -81,6 +84,15 @@
     <ClInclude Include="..\..\src\lua\lua.h">
       <Filter>lua</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\core\luastate.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\jade.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\logger.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\lua\lapi.c">
@@ -152,9 +164,6 @@
     <ClCompile Include="..\..\src\lua\ltm.c">
       <Filter>lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\lua\lua.c">
-      <Filter>lua</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\lua\lundump.c">
       <Filter>lua</Filter>
     </ClCompile>
@@ -170,9 +179,6 @@
     <ClCompile Include="..\..\src\lua\ldebug.c">
       <Filter>lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\lua\luac.c">
-      <Filter>lua</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\lua\lbitlib.c">
       <Filter>lua</Filter>
     </ClCompile>
@@ -184,6 +190,13 @@
     </ClCompile>
     <ClCompile Include="..\..\src\lua\ldo.c">
       <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\entry\win32\main.cpp" />
+    <ClCompile Include="..\..\src\core\luastate.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\logger.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
