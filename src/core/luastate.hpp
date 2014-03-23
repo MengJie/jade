@@ -28,18 +28,18 @@
 #define _JADE_LUASTATE_INCLUDE_
 
 #include "jade.hpp"
+#include "singleton.hpp"
 
 JADE_NS_BEGIN
 
-class CLuaState
+class CLuaState: public TSingleton<CLuaState>
 {
-public:
-    static CLuaState * getInstance();
-
+    friend TSingleton<CLuaState>;
 private:
     CLuaState();
-    static CLuaState * instance;
-    lua_State * L;
+    ~CLuaState();
+private:
+    lua_State * L_;
 };
 
 JADE_NS_END

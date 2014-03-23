@@ -24,24 +24,31 @@
 //
 //========================================================================
 
-#include "luastate.hpp"
-#include "logger.hpp"
+#ifndef _JADE_SINGLETON_INCLUDE_
+#define _JADE_SINGLETON_INCLUDE_
 
-USING_JADE_NS
+JADE_NS_BEGIN
 
-CLuaState::CLuaState()
+template<typename T>
+class TSingleton
 {
-    L_ = luaL_newstate();
-    luaL_openlibs(L_);
-
-    if (luaL_dofile(L_, "init.lua")) {
-        ERROR("load lua init file failed: %s",
-            lua_tostring(L_, -1));
+public:
+    static T& instance()
+    {
+        static T instance;
+        return instance;
     }
-}
 
-CLuaState::~CLuaState()
-{
-    lua_close(L_);
-}
+protected:
+    TSingleton() {};
+    ~TSingleton() {};
+
+private:
+    TSingleton(const TSingleton<T> &);
+    TSingleton<T>& operator= (const TSingleton<T> &);
+};
+
+JADE_NS_END
+
+#endif
 

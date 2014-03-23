@@ -4,10 +4,12 @@
   <PropertyGroup Label="UserMacros">
     <JadeRoot>$(SolutionDir)..\..\</JadeRoot>
   </PropertyGroup>
-  <PropertyGroup />
+  <PropertyGroup>
+    <OutDir>$(JadeRoot)dist\win32\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(JadeRoot)dep\glm\inc;$(JadeRoot)dep\glfw\inc;$(JadeRoot)src\core;$(JadeRoot)src\lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(JadeRoot)src\core;$(JadeRoot)src\lua;$(JadeRoot)src\utils;$(JadeRoot)dep\glm\inc;$(JadeRoot)dep\glfw\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>

@@ -28,35 +28,33 @@
 #define _JADE_LOGGER_INCLUDE_
 
 #include "jade.hpp"
+#include "singleton.hpp"
 
 JADE_NS_BEGIN
 
-class CLogger
+class CLogger: public TSingleton<CLogger>
 {
+    friend TSingleton<CLogger>;
 public:
-    static CLogger * getInstance();
-
     void debug(const char * fmt, ...);
     void info(const char * fmt, ...);
     void warn(const char * fmt, ...);
     void error(const char * fmt, ...);
 
-protected:
+private:
+    CLogger();
+    ~CLogger();
     void flush();
 
 private:
-    CLogger();
-
-private:
     static const int BUF_SIZE;
-    static CLogger * instance;
-    static char buffer[];
+    static char buffer_[];
 };
 
-#define DEBUG(fmt, ...) CLogger::getInstance()->debug(fmt, ##__VA_ARGS__)
-#define INFO(fmt, ...)  CLogger::getInstance()->info(fmt, ##__VA_ARGS__)
-#define WARN(fmt, ...)  CLogger::getInstance()->warn(fmt, ##__VA_ARGS__)
-#define ERROR(fmt, ...) CLogger::getInstance()->error(fmt, ##__VA_ARGS__)
+#define DEBUG(fmt, ...) CLogger::instance().debug(fmt, ##__VA_ARGS__)
+#define INFO(fmt, ...)  CLogger::instance().info(fmt, ##__VA_ARGS__)
+#define WARN(fmt, ...)  CLogger::instance().warn(fmt, ##__VA_ARGS__)
+#define ERROR(fmt, ...) CLogger::instance().error(fmt, ##__VA_ARGS__)
 
 JADE_NS_END
 

@@ -7,6 +7,9 @@
     <Filter Include="core">
       <UniqueIdentifier>{fe6ffc9d-57a9-49fd-8022-70c49e1cc316}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{4e476ede-6131-421d-843e-1aa9b3d526ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\lua\lua.hpp">
@@ -91,6 +94,18 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\logger.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utils\singleton.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\application.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\object.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\autoreleasepool.hpp">
       <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -196,6 +211,15 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\core\logger.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\application.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\object.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\autoreleasepool.cpp">
       <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>

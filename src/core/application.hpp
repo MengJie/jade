@@ -24,24 +24,40 @@
 //
 //========================================================================
 
-#include "luastate.hpp"
-#include "logger.hpp"
+#ifndef _JADE_APPLICATION_INCLUDE_
+#define _JADE_APPLICATION_INCLUDE_
 
-USING_JADE_NS
+#include <glfw/glfw3.h>
 
-CLuaState::CLuaState()
+#include "jade.hpp"
+#include "object.hpp"
+
+JADE_NS_BEGIN
+
+class CApplication: public CObject
 {
-    L_ = luaL_newstate();
-    luaL_openlibs(L_);
+public:
+    virtual void run() = 0;
+};
 
-    if (luaL_dofile(L_, "init.lua")) {
-        ERROR("load lua init file failed: %s",
-            lua_tostring(L_, -1));
-    }
-}
-
-CLuaState::~CLuaState()
+class CGLFWApplication: public CApplication
 {
-    lua_close(L_);
-}
+public:
+    static void keyCallback(GLFWwindow*, int, int, int, int);
+    static void errorCallback(int, const char *);
+public:
+    CGLFWApplication(int width, int height);
+    virtual ~CGLFWApplication();
+
+    bool init();
+    void run();
+private:
+    GLFWwindow * window_;
+    int width_;
+    int height_;
+};
+
+JADE_NS_END
+
+#endif
 

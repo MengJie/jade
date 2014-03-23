@@ -32,31 +32,27 @@
 USING_JADE_NS
 
 const int CLogger::BUF_SIZE = 4096;
-CLogger * CLogger::instance = 0;
-char CLogger::buffer[BUF_SIZE];
-
-CLogger * CLogger::getInstance()
-{
-    if (0 == instance) {
-        instance = new CLogger();
-    }
-    return instance;
-}
+char CLogger::buffer_[BUF_SIZE];
 
 CLogger::CLogger()
 {
 }
 
-void CLogger::debug(const char * fmt, ...)
+CLogger::~CLogger()
+{
+}
+
+void
+CLogger::debug(const char * fmt, ...)
 {
     int writed = 0;
 
-    writed += _snprintf_s(buffer + writed, BUF_SIZE - writed,
+    writed += _snprintf_s(buffer_ + writed, BUF_SIZE - writed,
             _TRUNCATE, "[DEBUG] ");
 
     va_list argp;
     va_start(argp, fmt);
-    writed += vsnprintf(buffer + writed, BUF_SIZE - writed,
+    writed += vsnprintf(buffer_ + writed, BUF_SIZE - writed,
             fmt, argp);
     va_end(argp);
 
@@ -67,52 +63,55 @@ void CLogger::info(const char * fmt, ...)
 {
     int writed = 0;
 
-    writed += _snprintf_s(buffer + writed, BUF_SIZE - writed,
+    writed += _snprintf_s(buffer_ + writed, BUF_SIZE - writed,
             _TRUNCATE, "[INFO] ");
 
     va_list argp;
     va_start(argp, fmt);
-    writed += vsnprintf(buffer + writed, BUF_SIZE - writed,
+    writed += vsnprintf(buffer_ + writed, BUF_SIZE - writed,
             fmt, argp);
     va_end(argp);
 
     flush();
 }
 
-void CLogger::warn(const char * fmt, ...)
+void
+CLogger::warn(const char * fmt, ...)
 {
     int writed = 0;
 
-    writed += _snprintf_s(buffer + writed, BUF_SIZE - writed,
+    writed += _snprintf_s(buffer_ + writed, BUF_SIZE - writed,
             _TRUNCATE, "[WARN] ");
 
     va_list argp;
     va_start(argp, fmt);
-    writed += vsnprintf(buffer + writed, BUF_SIZE - writed,
+    writed += vsnprintf(buffer_ + writed, BUF_SIZE - writed,
             fmt, argp);
     va_end(argp);
 
     flush();
 }
 
-void CLogger::error(const char * fmt, ...)
+void
+CLogger::error(const char * fmt, ...)
 {
     int writed = 0;
 
-    writed += _snprintf_s(buffer + writed, BUF_SIZE - writed,
+    writed += _snprintf_s(buffer_ + writed, BUF_SIZE - writed,
             _TRUNCATE, "[ERROR] ");
 
     va_list argp;
     va_start(argp, fmt);
-    writed += vsnprintf(buffer + writed, BUF_SIZE - writed,
+    writed += vsnprintf(buffer_ + writed, BUF_SIZE - writed,
             fmt, argp);
     va_end(argp);
 
     flush();
 }
 
-void CLogger::flush()
+void
+CLogger::flush()
 {
-    fputs(buffer, stderr);
+    fputs(buffer_, stderr);
 }
 

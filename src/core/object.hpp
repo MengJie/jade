@@ -24,24 +24,37 @@
 //
 //========================================================================
 
-#include "luastate.hpp"
-#include "logger.hpp"
+#ifndef _JADE_OBJECT_INCLUDE_
+#define _JADE_OBJECT_INCLUDE_
 
-USING_JADE_NS
+#include "jade.hpp"
 
-CLuaState::CLuaState()
+JADE_NS_BEGIN
+
+class CAutoReleasePool;
+
+class CObject
 {
-    L_ = luaL_newstate();
-    luaL_openlibs(L_);
+    friend CAutoReleasePool;
+public:
+    // two phase object initialize.
+    // 1. set the initialize parameter in the constructor
+    // 2. do the actual initialize work in the init method, and
+    //    return the result.
+    CObject();
+    virtual ~CObject();
+    virtual bool init() = 0;
 
-    if (luaL_dofile(L_, "init.lua")) {
-        ERROR("load lua init file failed: %s",
-            lua_tostring(L_, -1));
-    }
-}
+    void retain();
+    void release();
+    void autorelease();
 
-CLuaState::~CLuaState()
-{
-    lua_close(L_);
-}
+private:
+    int reference_;
+    bool managed_;
+};
+
+JADE_NS_END
+
+#endif
 

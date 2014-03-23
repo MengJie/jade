@@ -24,24 +24,32 @@
 //
 //========================================================================
 
-#include "luastate.hpp"
-#include "logger.hpp"
+#ifndef _JADE_AUTORELEASEPOOL_INCLUDE_
+#define _JADE_AUTORELEASEPOOL_INCLUDE_
 
-USING_JADE_NS
+#include "jade.hpp"
+#include "singleton.hpp"
+#include "object.hpp"
 
-CLuaState::CLuaState()
+JADE_NS_BEGIN
+
+class CAutoReleasePool: public TSingleton<CAutoReleasePool>
 {
-    L_ = luaL_newstate();
-    luaL_openlibs(L_);
+    friend TSingleton<CAutoReleasePool>;
+public:
+    void addObject(CObject *);
+    void removeObject(CObject *);
+    void collect();
 
-    if (luaL_dofile(L_, "init.lua")) {
-        ERROR("load lua init file failed: %s",
-            lua_tostring(L_, -1));
-    }
-}
+private:
+    CAutoReleasePool();
+    ~CAutoReleasePool();
 
-CLuaState::~CLuaState()
-{
-    lua_close(L_);
-}
+private:
+    set<CObject *> pool_;
+};
+
+JADE_NS_END
+
+#endif
 

@@ -24,24 +24,36 @@
 //
 //========================================================================
 
-#include "luastate.hpp"
-#include "logger.hpp"
+#include "autoreleasepool.hpp"
 
 USING_JADE_NS
 
-CLuaState::CLuaState()
+CAutoReleasePool::CAutoReleasePool()
 {
-    L_ = luaL_newstate();
-    luaL_openlibs(L_);
-
-    if (luaL_dofile(L_, "init.lua")) {
-        ERROR("load lua init file failed: %s",
-            lua_tostring(L_, -1));
-    }
 }
 
-CLuaState::~CLuaState()
+CAutoReleasePool::~CAutoReleasePool()
 {
-    lua_close(L_);
+}
+
+void
+CAutoReleasePool::addObject(CObject *object)
+{
+    pool_.insert(object);
+}
+
+void
+CAutoReleasePool::removeObject(CObject *object)
+{
+    pool_.erase(object);
+}
+
+void
+CAutoReleasePool::collect()
+{
+    auto it = pool_.begin();
+    for ( ; it != pool_.end(); ++it) {
+        (*it)->release();
+    }
 }
 

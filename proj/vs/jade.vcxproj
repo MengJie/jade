@@ -38,7 +38,9 @@
     <Import Project="jade.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -63,9 +65,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\core\application.hpp" />
+    <ClInclude Include="..\..\src\core\autoreleasepool.hpp" />
     <ClInclude Include="..\..\src\core\jade.hpp" />
     <ClInclude Include="..\..\src\core\logger.hpp" />
     <ClInclude Include="..\..\src\core\luastate.hpp" />
+    <ClInclude Include="..\..\src\core\object.hpp" />
     <ClInclude Include="..\..\src\lua\lapi.h" />
     <ClInclude Include="..\..\src\lua\lauxlib.h" />
     <ClInclude Include="..\..\src\lua\lcode.h" />
@@ -91,10 +96,14 @@
     <ClInclude Include="..\..\src\lua\lundump.h" />
     <ClInclude Include="..\..\src\lua\lvm.h" />
     <ClInclude Include="..\..\src\lua\lzio.h" />
+    <ClInclude Include="..\..\src\utils\singleton.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\core\application.cpp" />
+    <ClCompile Include="..\..\src\core\autoreleasepool.cpp" />
     <ClCompile Include="..\..\src\core\logger.cpp" />
     <ClCompile Include="..\..\src\core\luastate.cpp" />
+    <ClCompile Include="..\..\src\core\object.cpp" />
     <ClCompile Include="..\..\src\entry\win32\main.cpp" />
     <ClCompile Include="..\..\src\lua\lapi.c" />
     <ClCompile Include="..\..\src\lua\lauxlib.c" />

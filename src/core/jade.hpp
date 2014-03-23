@@ -32,9 +32,16 @@
 #define USING_JADE_NS using namespace jade;
 
 #include "lua.hpp"
+#include <vector>
+#include <list>
+#include <set>
+#include <map>
+#include <string>
 
 typedef unsigned char u_char;
 typedef u_char byte;
+
+using namespace std;
 
 #endif
 
