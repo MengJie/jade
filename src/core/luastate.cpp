@@ -36,7 +36,7 @@ CLuaState::CLuaState()
 
     if (luaL_dofile(L_, "init.lua")) {
         ERROR("load lua init file failed: %s",
-            lua_tostring(L_, -1));
+            to<const char *>(-1));
     }
 }
 
@@ -44,4 +44,3 @@ CLuaState::~CLuaState()
 {
     lua_close(L_);
 }
-
