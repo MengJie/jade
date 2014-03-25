@@ -57,14 +57,7 @@ CGLFWApplication::~CGLFWApplication()
 bool
 CGLFWApplication::init()
 {
-    CLuaState& lua = CLuaState::instance();
-
-    lua.call("test");
-    lua.call("test", 1);
-    lua.call("test", "hi");
-    lua.call("test", 1, "hi");
-    lua.call("test", "hi", 1, "say");
-    lua.call("test", 5, "hi", 6, "say");
+    CLuaState::instance();
 
     glfwSetErrorCallback(CGLFWApplication::errorCallback);
 

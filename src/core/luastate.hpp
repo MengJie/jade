@@ -132,6 +132,11 @@ public:
         }
     }
 
+public:
+    inline lua_State * state() {
+        return L_;
+    }
+
 private:
     int _prepareCall() {
         int msgh = lua_gettop(L_);
