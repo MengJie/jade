@@ -7,8 +7,9 @@ end
 
 function test2()
     local foo = Foo()
-    foo:init()
-    foo:bar(5)
+    local mt = debug.getmetatable(foo)
+    print('mt:', mt)
+    foo:foo()
     foo = nil
     collectgarbage("collect")
     collectgarbage("collect")
