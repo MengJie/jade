@@ -108,6 +108,9 @@
     <ClInclude Include="..\..\src\core\autoreleasepool.hpp">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\utils\luaobject.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\lua\lapi.c">

@@ -30,76 +30,574 @@
 JADE_NS_BEGIN
 
 // a light weight cpp class wrapper for lua
-// reference: http://lua-users.org/wiki/LunaWrapper
+// inspired by http://lua-users.org/wiki/LunaWrapper and luabind
+
 #include "jade.hpp"
 #include "luastate.hpp"
 
 using namespace std;
 
-//template<typename T>
-//class TLuaObject
-//{
-//public:
-//    static void regist() {
-//        lua_State * L = CLuaState::instance().state();
-//        lua_pushcfunction(L, &TLuaObject<T>::constructor);
-//        lua_setglobal(L, T::className_);
-//
-//        luaL_newmetatable(L, T::className_);
-//        lua_pushstring(L, "__gc");
-//        lua_pushcfunction(L, &TLuaObject<T>::gc);
-//        lua_settable(L, -3);
-//
-//        lua_pushstring(L, "__index");
-//        lua_newtable(L);
-//        for (int i = 0; T::register_[i].name; i++) {
-//            lua_pushstring(L, T::register_[i].name);
-//            lua_pushnumber(L, i);
-//            lua_pushcclosure(L, &TLuaObject<T>::thunk, 1);
-//            lua_settable(L, -3);
-//        }
-//        lua_settable(L, -3);
-//    }
-//
-//    static int constructor(lua_State *L) {
-//        T* obj = new T();
-//        T** a = (T**)lua_newuserdata(L, sizeof(T*));
-//        *a = obj;
-//        luaL_getmetatable(L, T::className_);
-//        lua_setmetatable(L, -2);
-//        return 1;
-//    }
-//
-//    static int thunk(lua_State *L) {
-//        int i = (int)lua_tonumber(L, lua_upvalueindex(1));
-//        T** obj = static_cast<T**>(luaL_checkudata(L, 1, T::className_));
-//        lua_remove(L, 1);
-//        return ((*obj)->*(T::register_[i].mfunc))(L);
-//    }
-//
-//    static int gc(lua_State *L) {
-//        T** obj = static_cast<T**>(luaL_checkudata(L, -1, T::className_));
-//        (*obj)->release();
-//        return 0;
-//    }
-//
-//    struct RegType {
-//        const char *name;
-//        int(T::*mfunc)(lua_State*);
-//    };
-//};
+#define LUA_CTOR_BEGIN \
+        const char * name = lua_tostring(L, lua_upvalueindex(1)); \
+        CLuaState& lua = CLuaState::instance();
 
+#define LUA_CTOR_END \
+        C** a = (C**)lua_newuserdata(L, sizeof(C*)); \
+        *a = obj; \
+        luaL_getmetatable(L, name); \
+        lua_setmetatable(L, -2); \
+        return 1;
 
+template<
+    typename C
+    ,typename A1 = void
+    ,typename A2 = void
+    ,typename A3 = void
+    ,typename A4 = void
+    ,typename A5 = void
+    ,typename A6 = void
+    ,typename A7 = void
+    ,typename A8 = void
+>
+struct LuaConstructor {
+    static int ctor(lua_State * L) {
+        LUA_CTOR_BEGIN
+        A1 a1 = lua.to<A1>(1);
+        A2 a2 = lua.to<A2>(2);
+        A3 a3 = lua.to<A3>(3);
+        A4 a4 = lua.to<A4>(4);
+        A5 a5 = lua.to<A5>(5);
+        A6 a6 = lua.to<A6>(6);
+        A7 a7 = lua.to<A7>(7);
+        A8 a8 = lua.to<A8>(8);
+        C* obj = new C(a1, a2, a3, a4, a5, a6, a7, a8);
+        LUA_CTOR_END
+    }
+};
+template<
+    typename C
+    ,typename A1
+    ,typename A2
+    ,typename A3
+    ,typename A4
+    ,typename A5
+    ,typename A6
+    ,typename A7
+>
+struct LuaConstructor<C, A1, A2, A3, A4, A5, A6, A7> {
+    static int ctor(lua_State * L) {
+        LUA_CTOR_BEGIN
+        A1 a1 = lua.to<A1>(1);
+        A1 a1 = lua.to<A1>(1);
+        A2 a2 = lua.to<A2>(2);
+        A3 a3 = lua.to<A3>(3);
+        A4 a4 = lua.to<A4>(4);
+        A5 a5 = lua.to<A5>(5);
+        A6 a6 = lua.to<A6>(6);
+        A7 a7 = lua.to<A7>(7);
+        C* obj = new C(a1, a2, a3, a4, a5, a6, a7);
+        LUA_CTOR_END
+    }
+};
+template<
+    typename C
+    ,typename A1
+    ,typename A2
+    ,typename A3
+    ,typename A4
+    ,typename A5
+    ,typename A6
+>
+struct LuaConstructor<C, A1, A2, A3, A4, A5, A6> {
+    static int ctor(lua_State * L) {
+        LUA_CTOR_BEGIN
+        A1 a1 = lua.to<A1>(1);
+        A2 a2 = lua.to<A2>(2);
+        A3 a3 = lua.to<A3>(3);
+        A4 a4 = lua.to<A4>(4);
+        A5 a5 = lua.to<A5>(5);
+        A6 a6 = lua.to<A6>(6);
+        C* obj = new C(a1, a2, a3, a4, a5, a6);
+        LUA_CTOR_END
+    }
+};
+template<
+    typename C
+    ,typename A1
+    ,typename A2
+    ,typename A3
+    ,typename A4
+    ,typename A5
+>
+struct LuaConstructor<C, A1, A2, A3, A4, A5> {
+    static int ctor(lua_State * L) {
+        LUA_CTOR_BEGIN
+        A1 a1 = lua.to<A1>(1);
+        A2 a2 = lua.to<A2>(2);
+        A3 a3 = lua.to<A3>(3);
+        A4 a4 = lua.to<A4>(4);
+        A5 a5 = lua.to<A5>(5);
+        C* obj = new C(a1, a2, a3, a4, a5);
+        LUA_CTOR_END
+    }
+};
+template<
+    typename C
+    ,typename A1
+    ,typename A2
+    ,typename A3
+    ,typename A4
+>
+struct LuaConstructor<C, A1, A2, A3, A4> {
+    static int ctor(lua_State * L) {
+        LUA_CTOR_BEGIN
+        A1 a1 = lua.to<A1>(1);
+        A2 a2 = lua.to<A2>(2);
+        A3 a3 = lua.to<A3>(3);
+        A4 a4 = lua.to<A4>(4);
+        C* obj = new C(a1, a2, a3, a4);
+        LUA_CTOR_END
+    }
+};
+template<
+    typename C
+    ,typename A1
+    ,typename A2
+    ,typename A3
+>
+struct LuaConstructor<C, A1, A2, A3> {
+    static int ctor(lua_State * L) {
+        LUA_CTOR_BEGIN
+        A1 a1 = lua.to<A1>(1);
+        A2 a2 = lua.to<A2>(2);
+        A3 a3 = lua.to<A3>(3);
+        C* obj = new C(a1, a2, a3);
+        LUA_CTOR_END
+    }
+};
+template<
+    typename C
+    ,typename A1
+    ,typename A2
+>
+struct LuaConstructor<C, A1, A2> {
+    static int ctor(lua_State * L) {
+        LUA_CTOR_BEGIN
+        A1 a1 = lua.to<A1>(1);
+        A2 a2 = lua.to<A2>(2);
+        C* obj = new C(a1, a2);
+        LUA_CTOR_END
+    }
+};
+template<
+    typename C
+    ,typename A1
+>
+struct LuaConstructor<C, A1> {
+    static int ctor(lua_State * L) {
+        LUA_CTOR_BEGIN
+        A1 a1 = lua.to<A1>(1);
+        C* obj = new C(a1);
+        LUA_CTOR_END
+    }
+};
+template<typename C>
+struct LuaConstructor<C> {
+    static int ctor(lua_State * L) {
+        LUA_CTOR_BEGIN
+        C* obj = new C();
+        LUA_CTOR_END
+    }
+};
 
 template<typename T>
 class TLuaClassRegister
 {
-    template<typename T>
-    struct TLuaMethod_0_0
-    {
-        void (T::*func_)(void);
-        TLuaClassRegister<T> * register_;
+
+#define LUA_THUNK_BEGIN \
+            const char * name = lua_tostring(L, lua_upvalueindex(1)); \
+            MT * method = static_cast<MT *>(lua_touserdata(L, lua_upvalueindex(2))); \
+            C** obj = static_cast<C**>(luaL_checkudata(L, 1, name)); \
+            lua_remove(L, 1); \
+            CLuaState& lua = CLuaState::instance();
+
+    template<
+        typename C = T
+        ,typename R = void
+        ,typename A1 = void
+        ,typename A2 = void
+        ,typename A3 = void
+        ,typename A4 = void
+        ,typename A5 = void
+        ,typename A6 = void
+        ,typename A7 = void
+        ,typename A8 = void
+    >
+    struct LuaMethod {
+        typedef LuaMethod<C, R, A1, A2, A3, A4, A5, A6, A7, A8> MT;
+        R (C::*func)(A1, A2, A3, A4, A5, A6, A7, A8);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            A5 a5 = lua.to<A5>(5);
+            A6 a6 = lua.to<A6>(6);
+            A7 a7 = lua.to<A7>(7);
+            A8 a8 = lua.to<A8>(8);
+            R r = ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6, a7, a8);
+            lua.push(r);
+            return 1;
+        }
     };
+    template<
+        typename C
+        ,typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+        ,typename A6
+        ,typename A7
+    >
+    struct LuaMethod<C, R, A1, A2, A3, A4, A5, A6, A7> {
+        typedef LuaMethod<C, R, A1, A2, A3, A4, A5, A6, A7> MT;
+        R (C::*func)(A1, A2, A3, A4, A5, A6, A7);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            A5 a5 = lua.to<A5>(5);
+            A6 a6 = lua.to<A6>(6);
+            A7 a7 = lua.to<A7>(7);
+            R r = ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6, a7);
+            lua.push(r);
+            return 1;
+        }
+    };
+    template<
+        typename C
+        ,typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+        ,typename A6
+    >
+    struct LuaMethod<C, R, A1, A2, A3, A4, A5, A6> {
+        typedef LuaMethod<C, R, A1, A2, A3, A4, A5, A6> MT;
+        R (C::*func)(A1, A2, A3, A4, A5, A6);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            A5 a5 = lua.to<A5>(5);
+            A6 a6 = lua.to<A6>(6);
+            R r = ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6);
+            lua.push(r);
+            return 1;
+        }
+    };
+    template<
+        typename C
+        ,typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+    >
+    struct LuaMethod<C, R, A1, A2, A3, A4, A5> {
+        typedef LuaMethod<C, R, A1, A2, A3, A4, A5> MT;
+        R (C::*func)(A1, A2, A3, A4, A5);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            A5 a5 = lua.to<A5>(5);
+            R r = ((*obj)->*(method->func))(a1, a2, a3, a4, a5);
+            lua.push(r);
+            return 1;
+        }
+    };
+    template<
+        typename C
+        ,typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+    >
+    struct LuaMethod<C, R, A1, A2, A3, A4> {
+        typedef LuaMethod<C, R, A1, A2, A3, A4> MT;
+        R (C::*func)(A1, A2, A3, A4);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            R r = ((*obj)->*(method->func))(a1, a2, a3, a4);
+            lua.push(r);
+            return 1;
+        }
+    };
+    template<
+        typename C
+        ,typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+    >
+    struct LuaMethod<C, R, A1, A2, A3> {
+        typedef LuaMethod<C, R, A1, A2, A3> MT;
+        R (C::*func)(A1, A2, A3);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            R r = ((*obj)->*(method->func))(a1, a2, a3);
+            lua.push(r);
+            return 1;
+        }
+    };
+    template<
+        typename C
+        ,typename R
+        ,typename A1
+        ,typename A2
+    >
+    struct LuaMethod<C, R, A1, A2> {
+        typedef LuaMethod<C, R, A1, A2> MT;
+        R (C::*func)(A1, A2);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            R r = ((*obj)->*(method->func))(a1, a2);
+            lua.push(r);
+            return 1;
+        }
+    };
+    template<
+        typename C
+        ,typename R
+        ,typename A1
+    >
+    struct LuaMethod<C, R, A1> {
+        typedef LuaMethod<C, R, A1> MT;
+        R (C::*func)(A1);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            R r = ((*obj)->*(method->func))(a1);
+            lua.push(r);
+            return 1;
+        }
+    };
+    template<
+        typename C
+        ,typename R
+    >
+    struct LuaMethod<C, R> {
+        typedef LuaMethod<C, R> MT;
+        R (C::*func)();
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            R r = ((*obj)->*(method->func))();
+            lua.push(r);
+            return 1;
+        }
+    };
+    template<
+        typename C
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+        ,typename A6
+        ,typename A7
+        ,typename A8
+    >
+    struct LuaMethod<C, void, A1, A2, A3, A4, A5, A6, A7, A8> {
+        typedef LuaMethod<C, void, A1, A2, A3, A4, A5, A6, A7, A8> MT;
+        void (C::*func)(A1, A2, A3, A4, A5, A6, A7, A8);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            A5 a5 = lua.to<A5>(5);
+            A6 a6 = lua.to<A6>(6);
+            A7 a7 = lua.to<A7>(7);
+            A8 a8 = lua.to<A8>(8);
+            ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6, a7, a8);
+            return 0;
+        }
+    };
+    template<
+        typename C
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+        ,typename A6
+        ,typename A7
+    >
+    struct LuaMethod<C, void, A1, A2, A3, A4, A5, A6, A7> {
+        typedef LuaMethod<C, void, A1, A2, A3, A4, A5, A6, A7> MT;
+        void (C::*func)(A1, A2, A3, A4, A5, A6, A7);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            A5 a5 = lua.to<A5>(5);
+            A6 a6 = lua.to<A6>(6);
+            A7 a7 = lua.to<A7>(7);
+            ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6, a7);
+            return 0;
+        }
+    };
+    template<
+        typename C
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+        ,typename A6
+    >
+    struct LuaMethod<C, void, A1, A2, A3, A4, A5, A6> {
+        typedef LuaMethod<C, void, A1, A2, A3, A4, A5, A6> MT;
+        void (C::*func)(A1, A2, A3, A4, A5, A6);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            A5 a5 = lua.to<A5>(5);
+            A6 a6 = lua.to<A6>(6);
+            ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6);
+            return 0;
+        }
+    };
+    template<
+        typename C
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+    >
+    struct LuaMethod<C, void, A1, A2, A3, A4, A5> {
+        typedef LuaMethod<C, void, A1, A2, A3, A4, A5> MT;
+        void (C::*func)(A1, A2, A3, A4, A5);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            A5 a5 = lua.to<A5>(5);
+            ((*obj)->*(method->func))(a1, a2, a3, a4, a5);
+            return 0;
+        }
+    };
+    template<
+        typename C
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+    >
+    struct LuaMethod<C, void, A1, A2, A3, A4> {
+        typedef LuaMethod<C, void, A1, A2, A3, A4> MT;
+        void (C::*func)(A1, A2, A3, A4);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            A4 a4 = lua.to<A4>(4);
+            ((*obj)->*(method->func))(a1, a2, a3, a4);
+            return 0;
+        }
+    };
+    template<
+        typename C
+        ,typename A1
+        ,typename A2
+        ,typename A3
+    >
+    struct LuaMethod<C, void, A1, A2, A3> {
+        typedef LuaMethod<C, void, A1, A2, A3> MT;
+        void (C::*func)(A1, A2, A3);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            A3 a3 = lua.to<A3>(3);
+            ((*obj)->*(method->func))(a1, a2, a3);
+            return 0;
+        }
+    };
+    template<
+        typename C
+        ,typename A1
+        ,typename A2
+    >
+    struct LuaMethod<C, void, A1, A2> {
+        typedef LuaMethod<C, void, A1, A2> MT;
+        void (C::*func)(A1, A2);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            A2 a2 = lua.to<A2>(2);
+            ((*obj)->*(method->func))(a1, a2);
+            return 0;
+        }
+    };
+    template<
+        typename C
+        ,typename A1
+    >
+    struct LuaMethod<C, void, A1> {
+        typedef LuaMethod<C, void, A1> MT;
+        void (C::*func)(A1);
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            A1 a1 = lua.to<A1>(1);
+            ((*obj)->*(method->func))(a1);
+            return 0;
+        }
+    };
+    template<typename C>
+    struct LuaMethod<C> {
+        typedef LuaMethod<C> MT;
+        void (C::*func)();
+        static int thunk(lua_State * L) {
+            LUA_THUNK_BEGIN
+            ((*obj)->*(method->func))();
+            return 0;
+        }
+    };
+
 public:
     TLuaClassRegister<T>(const TLuaClassRegister<T> & rhs) {
         className_ = rhs.className_;
@@ -114,8 +612,7 @@ public:
 
         luaL_newmetatable(L_, className_.c_str());
         lua_pushstring(L_, "__gc");
-        TLuaMethod_0_0<T> * method = (TLuaMethod_0_0<T> *)lua_newuserdata(L_, sizeof(TLuaMethod_0_0<T>));
-        method->register_ = this;
+        lua_pushstring(L_, className_.c_str());
         lua_pushcclosure(L_, &TLuaClassRegister<T>::gc, 1);
         lua_settable(L_, -3);
 
@@ -124,53 +621,134 @@ public:
         lua_settable(L_, -3);
     }
 
-    TLuaClassRegister<T>& constructor() {
+    template<typename CT>
+    TLuaClassRegister<T>& method(CT _ct) {
         LuaStackBalancer_ balancer(L_);
 
-        TLuaMethod_0_0<T> * method = (TLuaMethod_0_0<T> *)lua_newuserdata(L_, sizeof(TLuaMethod_0_0<T>));
-        method->register_ = this;
-        lua_pushcclosure(L_, &TLuaClassRegister<T>::construct, 1);
-        lua_setglobal(L_, method->register_->className_.c_str());
+        lua_pushstring(L_, className_.c_str());
+        lua_pushcclosure(L_, &CT::ctor, 1);
+        lua_setglobal(L_, className_.c_str());
 
         return *this;
     }
 
-    TLuaClassRegister<T>& method(const char * name, void (T::*func)(void)) {
-        LuaStackBalancer_ balancer(L_);
+#define LUA_METHOD_BODY \
+    LuaStackBalancer_ balancer(L_); \
+    luaL_getmetatable(L_, className_.c_str()); \
+    lua_pushstring(L_, "__index"); \
+    lua_gettable(L_, -2); \
+    lua_pushstring(L_, name); \
+    lua_pushstring(L_, className_.c_str()); \
+    MT * method = static_cast<MT *>(lua_newuserdata(L_, sizeof(MT))); \
+    method->func = func; \
+    lua_pushcclosure(L_, &MT::thunk, 2); \
+    lua_settable(L_, -3); \
+    return *this;
 
-        luaL_getmetatable(L_, className_.c_str());
-        lua_pushstring(L_, "__index");
-        lua_gettable(L_, -2);
-
-        lua_pushstring(L_, name);
-        TLuaMethod_0_0<T> * method = (TLuaMethod_0_0<T> *)lua_newuserdata(L_, sizeof(TLuaMethod_0_0<T>));
-        method->func_ = func;
-        method->register_ = this;
-        lua_pushcclosure(L_, &TLuaClassRegister<T>::thunk_0_0, 1);
-        lua_settable(L_, -3);
-
-        return *this;
+    template<
+        typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+        ,typename A6
+        ,typename A7
+        ,typename A8
+    >
+    TLuaClassRegister<T>& method(const char * name, R (T::*func)(A1, A2, A3, A4, A5, A6, A7, A8)) {
+        typedef LuaMethod<T, R, A1, A2, A3, A4, A5, A6, A7, A8> MT;
+        LUA_METHOD_BODY
+    }
+    template<
+        typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+        ,typename A6
+        ,typename A7
+    >
+    TLuaClassRegister<T>& method(const char * name, R (T::*func)(A1, A2, A3, A4, A5, A6, A7)) {
+        typedef LuaMethod<T, R, A1, A2, A3, A4, A5, A6, A7> MT;
+        LUA_METHOD_BODY
+    }
+    template<
+        typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+        ,typename A6
+    >
+    TLuaClassRegister<T>& method(const char * name, R (T::*func)(A1, A2, A3, A4, A5, A6)) {
+        typedef LuaMethod<T, R, A1, A2, A3, A4, A5, A6> MT;
+        LUA_METHOD_BODY
+    }
+    template<
+        typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+        ,typename A5
+    >
+    TLuaClassRegister<T>& method(const char * name, R (T::*func)(A1, A2, A3, A4, A5)) {
+        typedef LuaMethod<T, R, A1, A2, A3, A4, A5> MT;
+        LUA_METHOD_BODY
+    }
+    template<
+        typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+        ,typename A4
+    >
+    TLuaClassRegister<T>& method(const char * name, R (T::*func)(A1, A2, A3, A4)) {
+        typedef LuaMethod<T, R, A1, A2, A3, A4> MT;
+        LUA_METHOD_BODY
+    }
+    template<
+        typename R
+        ,typename A1
+        ,typename A2
+        ,typename A3
+    >
+    TLuaClassRegister<T>& method(const char * name, R (T::*func)(A1, A2, A3)) {
+        typedef LuaMethod<T, R, A1, A2, A3> MT;
+        LUA_METHOD_BODY
+    }
+    template<
+        typename R
+        ,typename A1
+        ,typename A2
+    >
+    TLuaClassRegister<T>& method(const char * name, R (T::*func)(A1, A2)) {
+        typedef LuaMethod<T, R, A1, A2> MT;
+        LUA_METHOD_BODY
+    }
+    template<
+        typename R
+        ,typename A1
+    >
+    TLuaClassRegister<T>& method(const char * name, R (T::*func)(A1)) {
+        typedef LuaMethod<T, R, A1> MT;
+        LUA_METHOD_BODY
+    }
+    template<
+        typename R
+    >
+    TLuaClassRegister<T>& method(const char * name, R (T::*func)()) {
+        typedef LuaMethod<T, R> MT;
+        LUA_METHOD_BODY
     }
 
 protected:
-    static int thunk_0_0(lua_State *L) {
-        TLuaMethod_0_0<T> * method = (TLuaMethod_0_0<T> *)lua_touserdata(L, lua_upvalueindex(1));
-        T** obj = static_cast<T**>(luaL_checkudata(L, 1, method->register_->className_.c_str()));
-        ((*obj)->*(method->func_))();
-        return 0;
-    }
-    static int construct(lua_State *L) {
-        TLuaMethod_0_0<T> * method = (TLuaMethod_0_0<T> *)lua_touserdata(L, lua_upvalueindex(1));
-        T* obj = new T();
-        T** a = (T**)lua_newuserdata(L, sizeof(T*));
-        *a = obj;
-        luaL_getmetatable(L, method->register_->className_.c_str());
-        lua_setmetatable(L, -2);
-        return 1;
-    }
     static int gc(lua_State *L) {
-        TLuaMethod_0_0<T> * method = (TLuaMethod_0_0<T> *)lua_touserdata(L, lua_upvalueindex(1));
-        T** obj = static_cast<T**>(luaL_checkudata(L, -1, method->register_->className_.c_str()));
+        const char * name = lua_tostring(L, lua_upvalueindex(1));
+        T** obj = static_cast<T**>(luaL_checkudata(L, -1, name));
         (*obj)->release();
         return 0;
     }

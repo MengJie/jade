@@ -15,6 +15,20 @@ class CFoo: public CObject
 public:
     CFoo() {
         DEBUG("CFoo::construct\n");
+        i_ = 0;
+    }
+    CFoo(int i) {
+        DEBUG("CFoo::construct %d\n", i);
+        i_ = i;
+    }
+    CFoo(int i, int j) {
+        DEBUG("CFoo::construct %d, %d\n", i, j);
+        i_ = i + j;
+    }
+    CFoo(int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+        DEBUG("CFoo::construct %d, %d, %d, %d, %d, %d, %d, %d\n",
+                i1, i2, i3, i4, i5, i6, i7, i8);
+        i_ = i1 + i2 + i3 + i4 + i5 + i6 + i7 + i8 ;
     }
     ~CFoo() {
         DEBUG("CFoo::destruct\n");
@@ -24,39 +38,16 @@ public:
         return true;
     }
     void foo() {
-        DEBUG("CFoo::foo\n");
+        DEBUG("CFoo::foo %d\n", i_);
     }
-    void bar(int i) {
-        DEBUG("CFoo::bar %d\n", i);
+    int bar(int i) {
+        i_ = i;
+        DEBUG("CFoo::bar %d\n", i_);
+        return 71;
     }
+private:
+    int i_;
 };
-
-//class LFoo: public CFoo,
-//            public TLuaObject<LFoo>
-//{
-//public:
-//    int init(lua_State *L) {
-//        DEBUG("LFoo init\n");
-//        CFoo::init();
-//        return 0;
-//    }
-//    int bar(lua_State *L) {
-//        DEBUG("LFoo bar\n");
-//        int i = luaL_checkint(L, 1);
-//        CFoo::bar(i);
-//        return 0;
-//    }
-//public:
-//    typedef TLuaObject<LFoo>::RegType ReType;
-//    static const char className_[];
-//    static const RegType register_[];
-//};
-
-//const char LFoo::className_[] = "Foo";
-//const LFoo::RegType LFoo::register_[] = {
-//    {"init", &LFoo::init},
-//    {"bar", &LFoo::bar},
-//};
 
 int
 main(void)
@@ -65,8 +56,10 @@ main(void)
     app->init();
 
     LuaClass<CFoo>("Foo")
-        .constructor()
-        .method("foo", &CFoo::foo);
+        .method(LuaConstructor<CFoo, int, int, int, int, int, int, int, int>())
+        .method("foo", &CFoo::foo)
+        .method("bar", &CFoo::bar)
+		;
 
     //LFoo::regist();
     CLuaState & lua = CLuaState::instance();
