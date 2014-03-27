@@ -24,30 +24,55 @@
 //
 //========================================================================
 
-#ifndef _JADE_INCLUDE_
-#define _JADE_INCLUDE_
-
-#define JADE_NS_BEGIN namespace jade {
-#define JADE_NS_END }
-#define USING_JADE_NS using namespace jade;
-
-//#define GLEW_STATIC
-#include <gl/glew.h>
-#include <glfw/glfw3.h>
-#include <vector>
-#include <list>
-#include <set>
-#include <map>
-#include <string>
-#include <algorithm>
-
-#include "lua.hpp"
 #include "logger.hpp"
+#include "shader.hpp"
 
-typedef unsigned char u_char;
-typedef u_char byte;
+USING_JADE_NS
 
-using namespace std;
+CShader::CShader(GLenum shaderType, const char * shaderSource)
+    :shader_(0)
+{
+    type_ = shaderType;
+    source_ = shaderSource;
+}
 
-#endif
+CShader::~CShader()
+{
+    if (0 != shader_) {
+        glDeleteShader(shader_);
+    }
+}
+
+bool
+CShader::compile()
+{
+    shader_ = glCreateShader(type_);
+    const char *source = source_.c_str();
+    glShaderSource(shader_, 1, &source, NULL);
+
+    glCompileShader(shader_);
+
+    GLint status;
+    glGetShaderiv(shader_, GL_COMPILE_STATUS, &status);
+    if (status == GL_FALSE)
+    {
+        GLint length;
+        glGetShaderiv(shader_, GL_INFO_LOG_LENGTH, &length);
+
+        GLchar *log = new GLchar[length + 1];
+        glGetShaderInfoLog(shader_, length, NULL, log);
+
+        const char *strType = NULL;
+        switch(type_)
+        {
+        case GL_VERTEX_SHADER: strType = "vertex"; break;
+        case GL_GEOMETRY_SHADER: strType = "geometry"; break;
+        case GL_FRAGMENT_SHADER: strType = "fragment"; break;
+        }
+        ERROR("Compile failure in %s shader:\n%s\n", strType, log);
+        delete[] log;
+        return false;
+    }
+    return true;
+}
 

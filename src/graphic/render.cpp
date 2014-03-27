@@ -23,31 +23,3 @@
 //    distribution.
 //
 //========================================================================
-
-#ifndef _JADE_INCLUDE_
-#define _JADE_INCLUDE_
-
-#define JADE_NS_BEGIN namespace jade {
-#define JADE_NS_END }
-#define USING_JADE_NS using namespace jade;
-
-//#define GLEW_STATIC
-#include <gl/glew.h>
-#include <glfw/glfw3.h>
-#include <vector>
-#include <list>
-#include <set>
-#include <map>
-#include <string>
-#include <algorithm>
-
-#include "lua.hpp"
-#include "logger.hpp"
-
-typedef unsigned char u_char;
-typedef u_char byte;
-
-using namespace std;
-
-#endif
-

@@ -1,7 +1,4 @@
-#include <glfw/glfw3.h>
-
-#include <stdlib.h>
-#include <stdio.h>
+#include "jade.hpp"
 
 #include "object.hpp"
 #include "application.hpp"

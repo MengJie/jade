@@ -24,30 +24,63 @@
 //
 //========================================================================
 
-#ifndef _JADE_INCLUDE_
-#define _JADE_INCLUDE_
-
-#define JADE_NS_BEGIN namespace jade {
-#define JADE_NS_END }
-#define USING_JADE_NS using namespace jade;
-
-//#define GLEW_STATIC
-#include <gl/glew.h>
-#include <glfw/glfw3.h>
-#include <vector>
-#include <list>
-#include <set>
-#include <map>
-#include <string>
-#include <algorithm>
-
-#include "lua.hpp"
 #include "logger.hpp"
+#include "shader.hpp"
+#include "program.hpp"
 
-typedef unsigned char u_char;
-typedef u_char byte;
+USING_JADE_NS
 
-using namespace std;
+CProgram::CProgram()
+    :program_(0)
+{ }
 
-#endif
+CProgram::~CProgram()
+{
+    if (0 != program_) {
+        glDeleteProgram(program_);
+    }
+    auto it = shaders_.begin();
+    for (;it!=shaders.end(); ++it) {
+        (*it)->release();
+    }
+}
+
+bool
+CProgram::addShader(CShader * shader)
+{
+    shaders_.push_back(shader);
+    shader->retain();
+}
+
+bool
+CProgram::link()
+{
+    GLuint program_ = glCreateProgram();
+
+    for (auto it = shaders_.begin();it!=shaders.end(); ++it) {
+        glAttachShader(program_, (*it)->shader_);
+    }
+
+    glLinkProgram(program_);
+
+    GLint status;
+    glGetProgramiv (program_, GL_LINK_STATUS, &status);
+    if (status == GL_FALSE)
+    {
+        GLint length;
+        glGetProgramiv(program_, GL_INFO_LOG_LENGTH, &length);
+
+        GLchar *log = new GLchar[length + 1];
+        glGetProgramInfoLog(program_, length, NULL, log);
+        ERROR("Linker failure: %s\n", log);
+        delete[] strInfoLog;
+        return false
+    }
+
+    for (auto it = shaders_.begin();it!=shaders.end(); ++it) {
+        glDetachShader(program_, (*it)->shader_);
+    }
+
+    return program;
+}
 

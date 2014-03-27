@@ -10,6 +10,9 @@
     <Filter Include="utils">
       <UniqueIdentifier>{4e476ede-6131-421d-843e-1aa9b3d526ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="graphic">
+      <UniqueIdentifier>{f34a8d6b-cca4-4a37-b063-77685c45ed12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\lua\lua.hpp">

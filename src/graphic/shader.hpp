@@ -24,30 +24,31 @@
 //
 //========================================================================
 
-#ifndef _JADE_INCLUDE_
-#define _JADE_INCLUDE_
+#ifndef _JADE_SHADER_INCLUDE_
+#define _JADE_SHADER_INCLUDE_
 
-#define JADE_NS_BEGIN namespace jade {
-#define JADE_NS_END }
-#define USING_JADE_NS using namespace jade;
+#include "jade.hpp"
+#include "object.hpp"
 
-//#define GLEW_STATIC
-#include <gl/glew.h>
-#include <glfw/glfw3.h>
-#include <vector>
-#include <list>
-#include <set>
-#include <map>
-#include <string>
-#include <algorithm>
+JADE_NS_BEGIN
 
-#include "lua.hpp"
-#include "logger.hpp"
+class CProgram;
 
-typedef unsigned char u_char;
-typedef u_char byte;
+class CShader: public CObject
+{
+    friend CProgram;
+public:
+    CShader(GLenum shaderType, const char * shaderSource);
+    ~CShader();
 
-using namespace std;
+    bool compile();
+private:
+    GLenum type_;
+    GLuint shader_;
+    string source_;
+};
+
+JADE_NS_END
 
 #endif
 

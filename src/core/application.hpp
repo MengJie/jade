@@ -27,8 +27,6 @@
 #ifndef _JADE_APPLICATION_INCLUDE_
 #define _JADE_APPLICATION_INCLUDE_
 
-#include <glfw/glfw3.h>
-
 #include "jade.hpp"
 #include "object.hpp"
 
