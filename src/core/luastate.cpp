@@ -35,7 +35,7 @@ CLuaState::CLuaState()
     luaL_openlibs(L_);
 
     if (luaL_dofile(L_, "init.lua")) {
-        ERROR("load lua init file failed: %s",
+        ERROR("load lua init file failed: %s\n",
             to<const char *>(-1));
     }
 }

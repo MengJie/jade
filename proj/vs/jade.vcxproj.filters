@@ -114,6 +114,15 @@
     <ClInclude Include="..\..\src\utils\luaobject.hpp">
       <Filter>utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\graphic\program.hpp">
+      <Filter>graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\graphic\render.hpp">
+      <Filter>graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\graphic\shader.hpp">
+      <Filter>graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\lua\lapi.c">
@@ -227,6 +236,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\core\autoreleasepool.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphic\program.cpp">
+      <Filter>graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphic\render.cpp">
+      <Filter>graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphic\shader.cpp">
+      <Filter>graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

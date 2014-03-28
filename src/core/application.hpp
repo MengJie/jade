@@ -35,6 +35,7 @@ JADE_NS_BEGIN
 class CApplication: public CObject
 {
 public:
+    CApplication();
     virtual void run() = 0;
 };
 

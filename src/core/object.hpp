@@ -43,7 +43,7 @@ public:
     //    return the result.
     CObject();
     virtual ~CObject();
-    virtual bool init() = 0;
+    virtual bool init() { return true; }
 
     void retain();
     void release();

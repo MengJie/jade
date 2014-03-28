@@ -1,18 +1,35 @@
 
-print "hello, world!"
+local source = {
+[[
+    #version 330
+    layout(location = 0) in vec4 position;
+    void main()
+    {
+       gl_Position = position;
+    }
+]],
+[[
+    #version 330
+    out vec4 outputColor;
+    void main()
+    {
+       outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+]]
+}
 
-function test(a1, a2, a3, a4)
-    print("hello, lua", a1, a2, a3, a4)
-end
+function init()
+    program = Program()
 
-function test2()
-    local foo = Foo(5, 6, 7)
-    local mt = debug.getmetatable(foo)
-    foo:foo()
-    print(foo:bar(55))
-    foo:foo()
-    foo = nil
-    collectgarbage("collect")
-    collectgarbage("collect")
+    vertexShader = Shader(GL_VERTEX_SHADER, source[1])
+    fragmentShader = Shader(GL_FRAGMENT_SHADER, source[2])
+
+    vertexShader:compile()
+    fragmentShader:compile()
+
+    program:addShader(vertexShader)
+    program:addShader(fragmentShader)
+
+    program:link()
 end
 

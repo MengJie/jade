@@ -29,10 +29,11 @@
 
 #include "jade.hpp"
 #include "object.hpp"
+#include "shader.hpp"
 
 JADE_NS_BEGIN
 
-class CProgram: CObject
+class CProgram: public CObject
 {
 public:
     CProgram();
@@ -40,8 +41,9 @@ public:
 
     bool addShader(CShader * shader);
     bool link();
-private:
+
     GLuint program_;
+private:
     vector<CShader*> shaders_;
 };
 

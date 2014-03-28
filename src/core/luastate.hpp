@@ -33,6 +33,70 @@
 
 JADE_NS_BEGIN
 
+template<typename T>
+struct TLuaClassTraits {
+    static string className_;
+    static void push(lua_State *, T);
+    static T to(lua_State *, int);
+};
+template<typename T> string TLuaClassTraits<T>::className_;
+
+template<typename T>
+struct TLuaClassTraits<T*> {
+    static void push(lua_State *L, T* obj) {
+        string & name = TLuaClassTraits<T>::className_;
+        T** a = static_cast<T**>(lua_newuserdata(L_, sizeof(T*)));
+        *a = obj;
+        luaL_getmetatable(L, name.c_str());
+        lua_setmetatable(L, -2);
+        // when a object pointer push into lua state, a reference must be kept
+        // otherwise, this object will be released while gc.
+        obj->retain();
+    }
+    static T* to(lua_State *L, int index) {
+        string & name = TLuaClassTraits<T>::className_;
+        T** a = static_cast<T**>(luaL_checkudata(L, -1, name.c_str()));
+        T* obj = *a;
+        return obj;
+    }
+};
+template<>
+struct TLuaClassTraits<const char*> {
+    static void push(lua_State *L, const char * str) {
+        lua_pushstring(L, str);
+    }
+    static const char * to(lua_State *L, int index) {
+        return lua_tostring(L, index);
+    }
+};
+template<>
+struct TLuaClassTraits<int> {
+    static void push(lua_State *L, int i) {
+        lua_pushinteger(L, i);
+    }
+    static int to(lua_State *L, int index) {
+        return lua_tointeger(L, index);
+    }
+};
+template<>
+struct TLuaClassTraits<unsigned int> {
+    static void push(lua_State *L, unsigned int i) {
+        lua_pushinteger(L, i);
+    }
+    static unsigned int to(lua_State *L, int index) {
+        return lua_tointeger(L, index);
+    }
+};
+template<>
+struct TLuaClassTraits<bool> {
+    static void push(lua_State *L, bool b) {
+        lua_pushboolean(L, b);
+    }
+    static bool to(lua_State *L, int index) {
+        return lua_toboolean(L, index) != 0;
+    }
+};
+
 class LuaStackBalancer_
 {
 public:
@@ -52,25 +116,13 @@ class CLuaState: public TSingleton<CLuaState>
     friend TSingleton<CLuaState>;
 public:
     template <typename T>
-    T to(int index);
-    template<>
-    const char * to(int index) {
-        return lua_tostring(L_, index);
-    }
-    template<>
-    int to(int index) {
-        return lua_tointeger(L_, index);
+    T to(int index) {
+        return TLuaClassTraits<T>::to(L_, index);
     }
 
     template <typename T>
-    void push(T value);
-    template <>
-    void push(const char * str) {
-        lua_pushstring(L_, str);
-    }
-    template <>
-    void push(int i) {
-        lua_pushinteger(L_, i);
+    void push(T value) {
+        TLuaClassTraits<T>::push(L_, value);
     }
 
     void call(const char * name) {
@@ -78,7 +130,7 @@ public:
         int msgh = _prepareCall();
         lua_getglobal(L_, name);
         if (0 != lua_pcall(L_, 0, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s", name, to<const char *>(-1));
+            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
         }
     }
 
@@ -89,7 +141,7 @@ public:
         lua_getglobal(L_, name);
         push<A1>(a1);
         if (0 != lua_pcall(L_, 1, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s", name, to<const char *>(-1));
+            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
         }
     }
 
@@ -101,7 +153,7 @@ public:
         push<A1>(a1);
         push<A2>(a2);
         if (0 != lua_pcall(L_, 2, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s", name, to<const char *>(-1));
+            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
         }
     }
 
@@ -114,7 +166,7 @@ public:
         push<A2>(a2);
         push<A3>(a3);
         if (0 != lua_pcall(L_, 3, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s", name, to<const char *>(-1));
+            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
         }
     }
 
@@ -128,8 +180,21 @@ public:
         push<A3>(a3);
         push<A4>(a4);
         if (0 != lua_pcall(L_, 4, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s", name, to<const char *>(-1));
+            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
         }
+    }
+
+    template<typename T>
+    void setGlobal(const char *name, T value) {
+        TLuaClassTraits<T>::push(L_, value);
+        lua_setglobal(L_, name);
+    }
+
+    template<typename T>
+    T getGlobal(const char *name) {
+        LuaStackBalancer_ balancer(L_);
+        lua_getglobal(L_, name);
+        return TLuaClassTraits<T>::to(L_, -1);
     }
 
 public:

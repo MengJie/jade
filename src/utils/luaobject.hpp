@@ -760,6 +760,7 @@ private:
 template<typename T>
 TLuaClassRegister<T>&
 LuaClass(const char * name) {
+    TLuaClassTraits<T>::className_ = name;
     return *(new TLuaClassRegister<T>(name));
 }
 

@@ -39,8 +39,7 @@ CProgram::~CProgram()
     if (0 != program_) {
         glDeleteProgram(program_);
     }
-    auto it = shaders_.begin();
-    for (;it!=shaders.end(); ++it) {
+    for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
         (*it)->release();
     }
 }
@@ -50,14 +49,15 @@ CProgram::addShader(CShader * shader)
 {
     shaders_.push_back(shader);
     shader->retain();
+	return true;
 }
 
 bool
 CProgram::link()
 {
-    GLuint program_ = glCreateProgram();
+    program_ = glCreateProgram();
 
-    for (auto it = shaders_.begin();it!=shaders.end(); ++it) {
+    for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
         glAttachShader(program_, (*it)->shader_);
     }
 
@@ -73,14 +73,14 @@ CProgram::link()
         GLchar *log = new GLchar[length + 1];
         glGetProgramInfoLog(program_, length, NULL, log);
         ERROR("Linker failure: %s\n", log);
-        delete[] strInfoLog;
-        return false
+        delete[] log;
+        return false;
     }
 
-    for (auto it = shaders_.begin();it!=shaders.end(); ++it) {
+    for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
         glDetachShader(program_, (*it)->shader_);
     }
 
-    return program;
+    return true;
 }
 
