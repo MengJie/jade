@@ -21,8 +21,8 @@ local source = {
 function init()
     program = Program()
 
-    vertexShader = Shader(GL_VERTEX_SHADER, source[1])
-    fragmentShader = Shader(GL_FRAGMENT_SHADER, source[2])
+    local vertexShader = Shader(GL_VERTEX_SHADER, source[1])
+    local fragmentShader = Shader(GL_FRAGMENT_SHADER, source[2])
 
     vertexShader:compile()
     fragmentShader:compile()
@@ -31,5 +31,8 @@ function init()
     program:addShader(fragmentShader)
 
     program:link()
+
+    collectgarbage("collect")
+    collectgarbage("collect")
 end
 

@@ -38,8 +38,7 @@ JADE_NS_BEGIN
 using namespace std;
 
 #define LUA_CTOR_BEGIN \
-        const char * name = lua_tostring(L, lua_upvalueindex(1)); \
-        CLuaState& lua = CLuaState::instance();
+        const char * name = lua_tostring(L, lua_upvalueindex(1));
 
 #define LUA_CTOR_END \
         C** a = (C**)lua_newuserdata(L, sizeof(C*)); \
@@ -62,14 +61,14 @@ template<
 struct LuaConstructor {
     static int ctor(lua_State * L) {
         LUA_CTOR_BEGIN
-        A1 a1 = lua.to<A1>(1);
-        A2 a2 = lua.to<A2>(2);
-        A3 a3 = lua.to<A3>(3);
-        A4 a4 = lua.to<A4>(4);
-        A5 a5 = lua.to<A5>(5);
-        A6 a6 = lua.to<A6>(6);
-        A7 a7 = lua.to<A7>(7);
-        A8 a8 = lua.to<A8>(8);
+        A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+        A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+        A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+        A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+        A5 a5 = TLuaClassTraits<A5>::to(L, 5);
+        A6 a6 = TLuaClassTraits<A6>::to(L, 6);
+        A7 a7 = TLuaClassTraits<A7>::to(L, 7);
+        A8 a8 = TLuaClassTraits<A8>::to(L, 8);
         C* obj = new C(a1, a2, a3, a4, a5, a6, a7, a8);
         LUA_CTOR_END
     }
@@ -87,14 +86,13 @@ template<
 struct LuaConstructor<C, A1, A2, A3, A4, A5, A6, A7> {
     static int ctor(lua_State * L) {
         LUA_CTOR_BEGIN
-        A1 a1 = lua.to<A1>(1);
-        A1 a1 = lua.to<A1>(1);
-        A2 a2 = lua.to<A2>(2);
-        A3 a3 = lua.to<A3>(3);
-        A4 a4 = lua.to<A4>(4);
-        A5 a5 = lua.to<A5>(5);
-        A6 a6 = lua.to<A6>(6);
-        A7 a7 = lua.to<A7>(7);
+        A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+        A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+        A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+        A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+        A5 a5 = TLuaClassTraits<A5>::to(L, 5);
+        A6 a6 = TLuaClassTraits<A6>::to(L, 6);
+        A7 a7 = TLuaClassTraits<A7>::to(L, 7);
         C* obj = new C(a1, a2, a3, a4, a5, a6, a7);
         LUA_CTOR_END
     }
@@ -111,12 +109,12 @@ template<
 struct LuaConstructor<C, A1, A2, A3, A4, A5, A6> {
     static int ctor(lua_State * L) {
         LUA_CTOR_BEGIN
-        A1 a1 = lua.to<A1>(1);
-        A2 a2 = lua.to<A2>(2);
-        A3 a3 = lua.to<A3>(3);
-        A4 a4 = lua.to<A4>(4);
-        A5 a5 = lua.to<A5>(5);
-        A6 a6 = lua.to<A6>(6);
+        A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+        A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+        A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+        A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+        A5 a5 = TLuaClassTraits<A5>::to(L, 5);
+        A6 a6 = TLuaClassTraits<A6>::to(L, 6);
         C* obj = new C(a1, a2, a3, a4, a5, a6);
         LUA_CTOR_END
     }
@@ -132,11 +130,11 @@ template<
 struct LuaConstructor<C, A1, A2, A3, A4, A5> {
     static int ctor(lua_State * L) {
         LUA_CTOR_BEGIN
-        A1 a1 = lua.to<A1>(1);
-        A2 a2 = lua.to<A2>(2);
-        A3 a3 = lua.to<A3>(3);
-        A4 a4 = lua.to<A4>(4);
-        A5 a5 = lua.to<A5>(5);
+        A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+        A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+        A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+        A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+        A5 a5 = TLuaClassTraits<A5>::to(L, 5);
         C* obj = new C(a1, a2, a3, a4, a5);
         LUA_CTOR_END
     }
@@ -151,10 +149,10 @@ template<
 struct LuaConstructor<C, A1, A2, A3, A4> {
     static int ctor(lua_State * L) {
         LUA_CTOR_BEGIN
-        A1 a1 = lua.to<A1>(1);
-        A2 a2 = lua.to<A2>(2);
-        A3 a3 = lua.to<A3>(3);
-        A4 a4 = lua.to<A4>(4);
+        A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+        A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+        A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+        A4 a4 = TLuaClassTraits<A4>::to(L, 4);
         C* obj = new C(a1, a2, a3, a4);
         LUA_CTOR_END
     }
@@ -168,9 +166,9 @@ template<
 struct LuaConstructor<C, A1, A2, A3> {
     static int ctor(lua_State * L) {
         LUA_CTOR_BEGIN
-        A1 a1 = lua.to<A1>(1);
-        A2 a2 = lua.to<A2>(2);
-        A3 a3 = lua.to<A3>(3);
+        A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+        A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+        A3 a3 = TLuaClassTraits<A3>::to(L, 3);
         C* obj = new C(a1, a2, a3);
         LUA_CTOR_END
     }
@@ -183,8 +181,8 @@ template<
 struct LuaConstructor<C, A1, A2> {
     static int ctor(lua_State * L) {
         LUA_CTOR_BEGIN
-        A1 a1 = lua.to<A1>(1);
-        A2 a2 = lua.to<A2>(2);
+        A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+        A2 a2 = TLuaClassTraits<A2>::to(L, 2);
         C* obj = new C(a1, a2);
         LUA_CTOR_END
     }
@@ -196,7 +194,7 @@ template<
 struct LuaConstructor<C, A1> {
     static int ctor(lua_State * L) {
         LUA_CTOR_BEGIN
-        A1 a1 = lua.to<A1>(1);
+        A1 a1 = TLuaClassTraits<A1>::to(L, 1);
         C* obj = new C(a1);
         LUA_CTOR_END
     }
@@ -218,8 +216,7 @@ class TLuaClassRegister
             const char * name = lua_tostring(L, lua_upvalueindex(1)); \
             MT * method = static_cast<MT *>(lua_touserdata(L, lua_upvalueindex(2))); \
             C** obj = static_cast<C**>(luaL_checkudata(L, 1, name)); \
-            lua_remove(L, 1); \
-            CLuaState& lua = CLuaState::instance();
+            lua_remove(L, 1);
 
     template<
         typename C = T
@@ -238,16 +235,16 @@ class TLuaClassRegister
         R (C::*func)(A1, A2, A3, A4, A5, A6, A7, A8);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
-            A5 a5 = lua.to<A5>(5);
-            A6 a6 = lua.to<A6>(6);
-            A7 a7 = lua.to<A7>(7);
-            A8 a8 = lua.to<A8>(8);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+            A5 a5 = TLuaClassTraits<A5>::to(L, 5);
+            A6 a6 = TLuaClassTraits<A6>::to(L, 6);
+            A7 a7 = TLuaClassTraits<A7>::to(L, 7);
+            A8 a8 = TLuaClassTraits<A8>::to(L, 8);
             R r = ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6, a7, a8);
-            lua.push(r);
+            TLuaClassTraits<R>::push(L, r);
             return 1;
         }
     };
@@ -267,15 +264,15 @@ class TLuaClassRegister
         R (C::*func)(A1, A2, A3, A4, A5, A6, A7);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
-            A5 a5 = lua.to<A5>(5);
-            A6 a6 = lua.to<A6>(6);
-            A7 a7 = lua.to<A7>(7);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+            A5 a5 = TLuaClassTraits<A5>::to(L, 5);
+            A6 a6 = TLuaClassTraits<A6>::to(L, 6);
+            A7 a7 = TLuaClassTraits<A7>::to(L, 7);
             R r = ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6, a7);
-            lua.push(r);
+            TLuaClassTraits<R>::push(L, r);
             return 1;
         }
     };
@@ -294,14 +291,14 @@ class TLuaClassRegister
         R (C::*func)(A1, A2, A3, A4, A5, A6);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
-            A5 a5 = lua.to<A5>(5);
-            A6 a6 = lua.to<A6>(6);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+            A5 a5 = TLuaClassTraits<A5>::to(L, 5);
+            A6 a6 = TLuaClassTraits<A6>::to(L, 6);
             R r = ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6);
-            lua.push(r);
+            TLuaClassTraits<R>::push(L, r);
             return 1;
         }
     };
@@ -319,13 +316,13 @@ class TLuaClassRegister
         R (C::*func)(A1, A2, A3, A4, A5);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
-            A5 a5 = lua.to<A5>(5);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+            A5 a5 = TLuaClassTraits<A5>::to(L, 5);
             R r = ((*obj)->*(method->func))(a1, a2, a3, a4, a5);
-            lua.push(r);
+            TLuaClassTraits<R>::push(L, r);
             return 1;
         }
     };
@@ -342,12 +339,12 @@ class TLuaClassRegister
         R (C::*func)(A1, A2, A3, A4);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
             R r = ((*obj)->*(method->func))(a1, a2, a3, a4);
-            lua.push(r);
+            TLuaClassTraits<R>::push(L, r);
             return 1;
         }
     };
@@ -363,11 +360,11 @@ class TLuaClassRegister
         R (C::*func)(A1, A2, A3);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
             R r = ((*obj)->*(method->func))(a1, a2, a3);
-            lua.push(r);
+            TLuaClassTraits<R>::push(L, r);
             return 1;
         }
     };
@@ -382,10 +379,10 @@ class TLuaClassRegister
         R (C::*func)(A1, A2);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
             R r = ((*obj)->*(method->func))(a1, a2);
-            lua.push(r);
+            TLuaClassTraits<R>::push(L, r);
             return 1;
         }
     };
@@ -399,9 +396,9 @@ class TLuaClassRegister
         R (C::*func)(A1);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
             R r = ((*obj)->*(method->func))(a1);
-            lua.push(r);
+            TLuaClassTraits<R>::push(L, r);
             return 1;
         }
     };
@@ -415,7 +412,7 @@ class TLuaClassRegister
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
             R r = ((*obj)->*(method->func))();
-            lua.push(r);
+            TLuaClassTraits<R>::push(L, r);
             return 1;
         }
     };
@@ -435,14 +432,14 @@ class TLuaClassRegister
         void (C::*func)(A1, A2, A3, A4, A5, A6, A7, A8);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
-            A5 a5 = lua.to<A5>(5);
-            A6 a6 = lua.to<A6>(6);
-            A7 a7 = lua.to<A7>(7);
-            A8 a8 = lua.to<A8>(8);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+            A5 a5 = TLuaClassTraits<A5>::to(L, 5);
+            A6 a6 = TLuaClassTraits<A6>::to(L, 6);
+            A7 a7 = TLuaClassTraits<A7>::to(L, 7);
+            A8 a8 = TLuaClassTraits<A8>::to(L, 8);
             ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6, a7, a8);
             return 0;
         }
@@ -462,13 +459,13 @@ class TLuaClassRegister
         void (C::*func)(A1, A2, A3, A4, A5, A6, A7);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
-            A5 a5 = lua.to<A5>(5);
-            A6 a6 = lua.to<A6>(6);
-            A7 a7 = lua.to<A7>(7);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+            A5 a5 = TLuaClassTraits<A5>::to(L, 5);
+            A6 a6 = TLuaClassTraits<A6>::to(L, 6);
+            A7 a7 = TLuaClassTraits<A7>::to(L, 7);
             ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6, a7);
             return 0;
         }
@@ -487,12 +484,12 @@ class TLuaClassRegister
         void (C::*func)(A1, A2, A3, A4, A5, A6);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
-            A5 a5 = lua.to<A5>(5);
-            A6 a6 = lua.to<A6>(6);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+            A5 a5 = TLuaClassTraits<A5>::to(L, 5);
+            A6 a6 = TLuaClassTraits<A6>::to(L, 6);
             ((*obj)->*(method->func))(a1, a2, a3, a4, a5, a6);
             return 0;
         }
@@ -510,11 +507,11 @@ class TLuaClassRegister
         void (C::*func)(A1, A2, A3, A4, A5);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
-            A5 a5 = lua.to<A5>(5);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
+            A5 a5 = TLuaClassTraits<A5>::to(L, 5);
             ((*obj)->*(method->func))(a1, a2, a3, a4, a5);
             return 0;
         }
@@ -531,10 +528,10 @@ class TLuaClassRegister
         void (C::*func)(A1, A2, A3, A4);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
-            A4 a4 = lua.to<A4>(4);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
+            A4 a4 = TLuaClassTraits<A4>::to(L, 4);
             ((*obj)->*(method->func))(a1, a2, a3, a4);
             return 0;
         }
@@ -550,9 +547,9 @@ class TLuaClassRegister
         void (C::*func)(A1, A2, A3);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
-            A3 a3 = lua.to<A3>(3);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
+            A3 a3 = TLuaClassTraits<A3>::to(L, 3);
             ((*obj)->*(method->func))(a1, a2, a3);
             return 0;
         }
@@ -567,8 +564,8 @@ class TLuaClassRegister
         void (C::*func)(A1, A2);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
-            A2 a2 = lua.to<A2>(2);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
+            A2 a2 = TLuaClassTraits<A2>::to(L, 2);
             ((*obj)->*(method->func))(a1, a2);
             return 0;
         }
@@ -582,7 +579,7 @@ class TLuaClassRegister
         void (C::*func)(A1);
         static int thunk(lua_State * L) {
             LUA_THUNK_BEGIN
-            A1 a1 = lua.to<A1>(1);
+            A1 a1 = TLuaClassTraits<A1>::to(L, 1);
             ((*obj)->*(method->func))(a1);
             return 0;
         }
@@ -599,11 +596,6 @@ class TLuaClassRegister
     };
 
 public:
-    TLuaClassRegister<T>(const TLuaClassRegister<T> & rhs) {
-        className_ = rhs.className_;
-        L_ = rhs.L_;
-    }
-
     TLuaClassRegister<T>(const char * name) {
         className_ = name;
 
@@ -624,11 +616,9 @@ public:
     template<typename CT>
     TLuaClassRegister<T>& method(CT _ct) {
         LuaStackBalancer_ balancer(L_);
-
         lua_pushstring(L_, className_.c_str());
         lua_pushcclosure(L_, &CT::ctor, 1);
         lua_setglobal(L_, className_.c_str());
-
         return *this;
     }
 

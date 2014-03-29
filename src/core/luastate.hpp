@@ -111,77 +111,58 @@ private:
     int top_;
 };
 
+#define LUA_CALL_BEGIN \
+        LuaStackBalancer_ balancer(L_); \
+        int msgh = _prepareCall(); \
+        lua_getglobal(L_, name);
+
+#define LUA_CALL_END \
+        if (0 != lua_pcall(L_, 0, 0, msgh)) { \
+            ERROR("lua error on call [%s]: %s\n", name, lua_tostring(L_, -1)); \
+        }
+
+
 class CLuaState: public TSingleton<CLuaState>
 {
     friend TSingleton<CLuaState>;
 public:
-    template <typename T>
-    T to(int index) {
-        return TLuaClassTraits<T>::to(L_, index);
-    }
-
-    template <typename T>
-    void push(T value) {
-        TLuaClassTraits<T>::push(L_, value);
-    }
-
     void call(const char * name) {
-        LuaStackBalancer_ balancer(L_);
-        int msgh = _prepareCall();
-        lua_getglobal(L_, name);
-        if (0 != lua_pcall(L_, 0, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
-        }
+        LUA_CALL_BEGIN
+        LUA_CALL_END
     }
 
     template <typename A1>
     void call(const char * name, A1 a1) {
-        LuaStackBalancer_ balancer(L_);
-        int msgh = _prepareCall();
-        lua_getglobal(L_, name);
-        push<A1>(a1);
-        if (0 != lua_pcall(L_, 1, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
-        }
+        LUA_CALL_BEGIN
+        TLuaClassTraits<A1>::push(L_, a1);
+        LUA_CALL_END
     }
 
     template <typename A1, typename A2>
     void call(const char * name, A1 a1, A2 a2) {
-        LuaStackBalancer_ balancer(L_);
-        int msgh = _prepareCall();
-        lua_getglobal(L_, name);
-        push<A1>(a1);
-        push<A2>(a2);
-        if (0 != lua_pcall(L_, 2, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
-        }
+        LUA_CALL_BEGIN
+        TLuaClassTraits<A1>::push(L_, a1);
+        TLuaClassTraits<A2>::push(L_, a2);
+        LUA_CALL_END
     }
 
     template <typename A1, typename A2, typename A3>
     void call(const char * name, A1 a1, A2 a2, A3 a3) {
-        LuaStackBalancer_ balancer(L_);
-        int msgh = _prepareCall();
-        lua_getglobal(L_, name);
-        push<A1>(a1);
-        push<A2>(a2);
-        push<A3>(a3);
-        if (0 != lua_pcall(L_, 3, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
-        }
+        LUA_CALL_BEGIN
+        TLuaClassTraits<A1>::push(L_, a1);
+        TLuaClassTraits<A2>::push(L_, a2);
+        TLuaClassTraits<A3>::push(L_, a3);
+        LUA_CALL_END
     }
 
     template <typename A1, typename A2, typename A3, typename A4>
     void call(const char * name, A1 a1, A2 a2, A3 a3, A4 a4) {
-        LuaStackBalancer_ balancer(L_);
-        int msgh = _prepareCall();
-        lua_getglobal(L_, name);
-        push<A1>(a1);
-        push<A2>(a2);
-        push<A3>(a3);
-        push<A4>(a4);
-        if (0 != lua_pcall(L_, 4, 0, msgh)) {
-            ERROR("lua error on call [%s]: %s\n", name, to<const char *>(-1));
-        }
+        LUA_CALL_BEGIN
+        TLuaClassTraits<A1>::push(L_, a1);
+        TLuaClassTraits<A2>::push(L_, a2);
+        TLuaClassTraits<A3>::push(L_, a3);
+        TLuaClassTraits<A4>::push(L_, a4);
+        LUA_CALL_END
     }
 
     template<typename T>
