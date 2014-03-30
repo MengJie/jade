@@ -28,15 +28,14 @@
 #define _JADE_SHADER_INCLUDE_
 
 #include "jade.hpp"
-#include "object.hpp"
+#include "globject.hpp"
 
 JADE_NS_BEGIN
 
 class CProgram;
 
-class CShader: public CObject
+class CShader: public CGLObject
 {
-    friend CProgram;
 public:
     CShader(GLenum shaderType, const char * shaderSource);
     ~CShader();
@@ -44,7 +43,6 @@ public:
     bool compile();
 private:
     GLenum type_;
-    GLuint shader_;
     string source_;
 };
 

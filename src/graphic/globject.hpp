@@ -24,62 +24,26 @@
 //
 //========================================================================
 
-#include "logger.hpp"
-#include "shader.hpp"
-#include "program.hpp"
+#ifndef _JADE_GLOBJECT_INCLUDE_
+#define _JADE_GLOBJECT_INCLUDE_
 
-USING_JADE_NS
+#include "jade.hpp"
+#include "object.hpp"
 
-CProgram::CProgram()
-{ }
+JADE_NS_BEGIN
 
-CProgram::~CProgram()
+class CGLObject: public CObject
 {
-    if (0 != id_) {
-        glDeleteProgram(id_);
-    }
-    for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
-        (*it)->release();
-    }
-}
+public:
+    CGLObject() :id_(0) {};
+    virtual ~CGLObject() {};
+    GLuint getId();
 
-bool
-CProgram::addShader(CShader * shader)
-{
-    shaders_.push_back(shader);
-    shader->retain();
-    return true;
-}
+protected:
+    GLuint id_;
+};
 
-bool
-CProgram::link()
-{
-    id_ = glCreateProgram();
+JADE_NS_END
 
-    for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
-        glAttachShader(id_, (*it)->getId());
-    }
-
-    glLinkProgram(id_);
-
-    GLint status;
-    glGetProgramiv (id_, GL_LINK_STATUS, &status);
-    if (status == GL_FALSE)
-    {
-        GLint length;
-        glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &length);
-
-        GLchar *log = new GLchar[length + 1];
-        glGetProgramInfoLog(id_, length, NULL, log);
-        ERROR("Linker failure: %s\n", log);
-        delete[] log;
-        return false;
-    }
-
-    for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
-        glDetachShader(id_, (*it)->getId());
-    }
-
-    return true;
-}
+#endif
 

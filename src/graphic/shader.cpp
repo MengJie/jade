@@ -30,7 +30,6 @@
 USING_JADE_NS
 
 CShader::CShader(GLenum shaderType, const char * shaderSource)
-    :shader_(0)
 {
     type_ = shaderType;
     source_ = shaderSource;
@@ -38,29 +37,29 @@ CShader::CShader(GLenum shaderType, const char * shaderSource)
 
 CShader::~CShader()
 {
-    if (0 != shader_) {
-        glDeleteShader(shader_);
+    if (0 != id_) {
+        glDeleteShader(id_);
     }
 }
 
 bool
 CShader::compile()
 {
-    shader_ = glCreateShader(type_);
+    id_ = glCreateShader(type_);
     const char *source = source_.c_str();
-    glShaderSource(shader_, 1, &source, NULL);
+    glShaderSource(id_, 1, &source, NULL);
 
-    glCompileShader(shader_);
+    glCompileShader(id_);
 
     GLint status;
-    glGetShaderiv(shader_, GL_COMPILE_STATUS, &status);
+    glGetShaderiv(id_, GL_COMPILE_STATUS, &status);
     if (status == GL_FALSE)
     {
         GLint length;
-        glGetShaderiv(shader_, GL_INFO_LOG_LENGTH, &length);
+        glGetShaderiv(id_, GL_INFO_LOG_LENGTH, &length);
 
         GLchar *log = new GLchar[length + 1];
-        glGetShaderInfoLog(shader_, length, NULL, log);
+        glGetShaderInfoLog(id_, length, NULL, log);
 
         const char *strType = NULL;
         switch(type_)

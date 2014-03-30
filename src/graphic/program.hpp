@@ -33,7 +33,7 @@
 
 JADE_NS_BEGIN
 
-class CProgram: public CObject
+class CProgram: public CGLObject
 {
 public:
     CProgram();
@@ -42,7 +42,6 @@ public:
     bool addShader(CShader * shader);
     bool link();
 
-    GLuint program_;
 private:
     vector<CShader*> shaders_;
 };

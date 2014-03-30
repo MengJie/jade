@@ -123,6 +123,9 @@
     <ClInclude Include="..\..\src\graphic\shader.hpp">
       <Filter>graphic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\graphic\globject.hpp">
+      <Filter>graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\lua\lapi.c">
@@ -244,6 +247,9 @@
       <Filter>graphic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\graphic\shader.cpp">
+      <Filter>graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphic\globject.cpp">
       <Filter>graphic</Filter>
     </ClCompile>
   </ItemGroup>

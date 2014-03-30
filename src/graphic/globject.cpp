@@ -24,62 +24,11 @@
 //
 //========================================================================
 
-#include "logger.hpp"
-#include "shader.hpp"
-#include "program.hpp"
+#include "globject.hpp"
 
 USING_JADE_NS
 
-CProgram::CProgram()
-{ }
-
-CProgram::~CProgram()
+GLuint CGLObject::getId()
 {
-    if (0 != id_) {
-        glDeleteProgram(id_);
-    }
-    for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
-        (*it)->release();
-    }
+    return id_;
 }
-
-bool
-CProgram::addShader(CShader * shader)
-{
-    shaders_.push_back(shader);
-    shader->retain();
-    return true;
-}
-
-bool
-CProgram::link()
-{
-    id_ = glCreateProgram();
-
-    for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
-        glAttachShader(id_, (*it)->getId());
-    }
-
-    glLinkProgram(id_);
-
-    GLint status;
-    glGetProgramiv (id_, GL_LINK_STATUS, &status);
-    if (status == GL_FALSE)
-    {
-        GLint length;
-        glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &length);
-
-        GLchar *log = new GLchar[length + 1];
-        glGetProgramInfoLog(id_, length, NULL, log);
-        ERROR("Linker failure: %s\n", log);
-        delete[] log;
-        return false;
-    }
-
-    for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
-        glDetachShader(id_, (*it)->getId());
-    }
-
-    return true;
-}
-

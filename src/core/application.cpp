@@ -162,7 +162,7 @@ CGLFWApplication::run()
 
     CProgram * program = lua.getGlobal<CProgram *>("program");
 
-    glUseProgram(program->program_);
+    glUseProgram(program->getId());
 
     glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
     glEnableVertexAttribArray(0);

@@ -71,6 +71,7 @@
     <ClInclude Include="..\..\src\core\logger.hpp" />
     <ClInclude Include="..\..\src\core\luastate.hpp" />
     <ClInclude Include="..\..\src\core\object.hpp" />
+    <ClInclude Include="..\..\src\graphic\globject.hpp" />
     <ClInclude Include="..\..\src\graphic\program.hpp" />
     <ClInclude Include="..\..\src\graphic\render.hpp" />
     <ClInclude Include="..\..\src\graphic\shader.hpp" />
@@ -109,6 +110,7 @@
     <ClCompile Include="..\..\src\core\luastate.cpp" />
     <ClCompile Include="..\..\src\core\object.cpp" />
     <ClCompile Include="..\..\src\entry\win32\main.cpp" />
+    <ClCompile Include="..\..\src\graphic\globject.cpp" />
     <ClCompile Include="..\..\src\graphic\program.cpp" />
     <ClCompile Include="..\..\src\graphic\render.cpp" />
     <ClCompile Include="..\..\src\graphic\shader.cpp" />
