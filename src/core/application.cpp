@@ -83,7 +83,7 @@ CGLFWApplication::keyCallback(GLFWwindow * window, int key, int scancode,
 void
 CGLFWApplication::errorCallback(int error, const char * desc)
 {
-    ERROR("%d:%s", error, desc);
+    ERROR("GLFW ERROR [%d]:%s", error, desc);
 }
 
 CGLFWApplication::CGLFWApplication(int width, int height):
