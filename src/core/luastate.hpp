@@ -59,6 +59,11 @@ struct TLuaClassTraits<T*> {
         T* obj = *a;
         return obj;
     }
+    static T* toUnchecked(lua_State *L, int index) {
+        T** a = static_cast<T**>(lua_touserdata(L, -1));
+        T* obj = *a;
+        return obj;
+    }
 };
 template<>
 struct TLuaClassTraits<const char*> {
@@ -185,6 +190,12 @@ public:
         LuaStackBalancer_ balancer(L_);
         lua_getglobal(L_, name);
         return TLuaClassTraits<T>::to(L_, -1);
+    }
+    template<typename T>
+    T getGlobalUnchecked(const char *name) {
+        LuaStackBalancer_ balancer(L_);
+        lua_getglobal(L_, name);
+        return TLuaClassTraits<T>::toUnchecked(L_, -1);
     }
 
 public:

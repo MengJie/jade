@@ -150,7 +150,7 @@ CGLFWApplication::run()
     glClear(GL_COLOR_BUFFER_BIT);
 
     CProgram * program = lua.getGlobal<CProgram *>("program");
-    CTrianglesBuffer * buffer = lua.getGlobal<CTrianglesBuffer *>("buffer");
+    CBuffer * buffer = lua.getGlobalUnchecked<CBuffer *>("buffer");
 
     glUseProgram(program->getId());
 
