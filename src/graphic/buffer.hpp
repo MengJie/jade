@@ -38,12 +38,40 @@ public:
     CBuffer();
     virtual ~CBuffer();
 
+    virtual void enable() {};
+    virtual void disable() {};
+    virtual void draw() {};
+
+protected:
     void bindBuffer(GLenum target);
     void bufferData(GLenum target,
             GLsizeiptr size,
             const GLvoid * data,
             GLenum usage);
-}
+};
+
+class CTrianglesBuffer: public CBuffer
+{
+    struct Vertex {
+        float x;
+        float y;
+        float z;
+        float a;
+    };
+public:
+    CTrianglesBuffer(GLuint location);
+    virtual ~CTrianglesBuffer();
+
+    virtual bool init();
+    virtual void enable();
+    virtual void disable();
+    virtual void draw();
+
+    void setPoint(int index, float x, float y, float z, float a);
+private:
+    vector<Vertex> positions_;
+    GLuint location_;
+};
 
 JADE_NS_END
 

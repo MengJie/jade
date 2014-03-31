@@ -40,16 +40,68 @@ CBuffer::~CBuffer()
     }
 }
 
-void CBuffer::bindBuffer(GLenmu target)
+void
+CBuffer::bindBuffer(GLenum target)
 {
     glBindBuffer(target, id_);
 }
 
-void CBuffer::bufferData(GLenum target,
+void
+CBuffer::bufferData(GLenum target,
         GLsizeiptr size,
         const GLvoid * data,
         GLenum usage)
 {
+    glBindBuffer(target, id_);
+    glBufferData(target, size, data, usage);
+    glBindBuffer(target, 0);
+}
 
+////////////////////////////////////////////////////////////////////////////////
+
+CTrianglesBuffer::CTrianglesBuffer(GLuint location)
+    :positions_(3), location_(location)
+{
+}
+
+CTrianglesBuffer::~CTrianglesBuffer()
+{
+}
+
+bool
+CTrianglesBuffer::init()
+{
+    bufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*3, &positions_[0], GL_STATIC_DRAW);
+    return true;
+}
+
+void
+CTrianglesBuffer::enable()
+{
+    bindBuffer(GL_ARRAY_BUFFER);
+    glEnableVertexAttribArray(location_);
+    glVertexAttribPointer(location_, 4, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+void
+CTrianglesBuffer::disable()
+{
+    glDisableVertexAttribArray(location_);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void
+CTrianglesBuffer::draw()
+{
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+void
+CTrianglesBuffer::setPoint(int index, float x, float y, float z, float a)
+{
+    positions_[index].x = x;
+    positions_[index].y = y;
+    positions_[index].z = z;
+    positions_[index].a = a;
 }
 

@@ -1,19 +1,16 @@
 
 local source = {
 [[
-    #version 330
-    layout(location = 0) in vec4 position;
+    attribute vec4 position;
     void main()
     {
        gl_Position = position;
     }
 ]],
 [[
-    #version 330
-    out vec4 outputColor;
     void main()
     {
-       outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+       gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
     }
 ]]
 }
@@ -31,6 +28,14 @@ function init()
     program:addShader(fragmentShader)
 
     program:link()
+
+    buffer = TrianglesBuffer(program:getAttribLocation("position"))
+
+    buffer:setPoint(0, 0.75, 0.75, 0, 1)
+    buffer:setPoint(1, 0.75, -0.75, 0, 1)
+    buffer:setPoint(2, -0.75, -0.75, 0, 1)
+
+    buffer:init()
 
     collectgarbage("collect")
     collectgarbage("collect")

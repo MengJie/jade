@@ -83,3 +83,13 @@ CProgram::link()
     return true;
 }
 
+GLuint
+CProgram::getAttribLocation(const GLchar * name)
+{
+    GLuint location = glGetAttribLocation(id_, name);
+    if (-1 == location) {
+        ERROR("Could not bind attribute: %s\n", name);
+    }
+    return location;
+}
+

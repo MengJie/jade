@@ -96,6 +96,15 @@ struct TLuaClassTraits<bool> {
         return lua_toboolean(L, index) != 0;
     }
 };
+template<>
+struct TLuaClassTraits<float> {
+    static void push(lua_State *L, float f) {
+        lua_pushnumber(L, f);
+    }
+    static float to(lua_State *L, int index) {
+        return (float)lua_tonumber(L, index);
+    }
+};
 
 class LuaStackBalancer_
 {
