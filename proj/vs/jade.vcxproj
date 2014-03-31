@@ -76,6 +76,7 @@
     <ClInclude Include="..\..\src\graphic\program.hpp" />
     <ClInclude Include="..\..\src\graphic\render.hpp" />
     <ClInclude Include="..\..\src\graphic\shader.hpp" />
+    <ClInclude Include="..\..\src\graphic\triangles.hpp" />
     <ClInclude Include="..\..\src\lua\lapi.h" />
     <ClInclude Include="..\..\src\lua\lauxlib.h" />
     <ClInclude Include="..\..\src\lua\lcode.h" />
@@ -111,11 +112,11 @@
     <ClCompile Include="..\..\src\core\luastate.cpp" />
     <ClCompile Include="..\..\src\core\object.cpp" />
     <ClCompile Include="..\..\src\entry\win32\main.cpp" />
-    <ClCompile Include="..\..\src\graphic\buffer.cpp" />
     <ClCompile Include="..\..\src\graphic\globject.cpp" />
     <ClCompile Include="..\..\src\graphic\program.cpp" />
     <ClCompile Include="..\..\src\graphic\render.cpp" />
     <ClCompile Include="..\..\src\graphic\shader.cpp" />
+    <ClCompile Include="..\..\src\graphic\triangles.cpp" />
     <ClCompile Include="..\..\src\lua\lapi.c" />
     <ClCompile Include="..\..\src\lua\lauxlib.c" />
     <ClCompile Include="..\..\src\lua\lbaselib.c" />

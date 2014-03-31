@@ -61,6 +61,7 @@ struct TLuaClassTraits<T*> {
     }
     static T* toUnchecked(lua_State *L, int index) {
         T** a = static_cast<T**>(lua_touserdata(L, -1));
+        if (0 == a) return NULL;
         T* obj = *a;
         return obj;
     }

@@ -28,49 +28,75 @@
 #define _JADE_GLBUFFER_INCLUDE_
 
 #include "jade.hpp"
-#include "globject.hpp"
 
 JADE_NS_BEGIN
 
-class CBuffer : public CGLObject
+template<typename T>
+class CGLBufferCommon
 {
 public:
-    CBuffer();
-    virtual ~CBuffer();
-
-    virtual void enable() {};
-    virtual void disable() {};
-    virtual void draw() {};
-
+    CGLBufferCommon() {
+        glGenBuffers(1, &id_);
+    }
+    virtual ~CGLBufferCommon() {
+        if (0 != id_) {
+            glDeleteBuffers(1, &id_);
+        }
+    }
+    inline void bind() {
+        glBindBuffer(GL_ARRAY_BUFFER, id_);
+    }
+    inline void unbind() {
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+    inline void update() {
+        glBufferData(GL_ARRAY_BUFFER,
+            sizeof(T::Vertex) * static_cast<T*>(this)->datas_.size(),
+            &static_cast<T*>(this)->datas_[0],
+            GL_STATIC_DRAW);
+    }
 protected:
-    void bindBuffer(GLenum target);
-    void bufferData(GLenum target,
-            GLsizeiptr size,
-            const GLvoid * data,
-            GLenum usage);
+    GLuint id_;
 };
 
-class CTrianglesBuffer: public CBuffer
+template<
+    typename C1
+    ,typename C2 = void
+    ,typename C3 = void
+>
+class CGLBuffer: public CGLBufferCommon< CGLBuffer<C1, C2, C3> >
 {
-    struct Vertex {
-        float x;
-        float y;
-        float z;
-        float a;
-    };
 public:
-    CTrianglesBuffer(GLuint location);
-    virtual ~CTrianglesBuffer();
-
-    virtual bool init();
-    virtual void enable();
-    virtual void disable();
-    virtual void draw();
-
-    void setPoint(int index, float x, float y, float z, float a);
-private:
-    vector<Vertex> positions_;
-    GLuint location_;
+    struct Vertex {
+        C1 c1;
+        C2 c2;
+        C3 c3;
+    };
+    vector<Vertex> datas_;
+};
+template<
+    typename C1
+    ,typename C2
+>
+class CGLBuffer<C1, C2>: public CGLBufferCommon<CGLBuffer<C1,C2> >
+{
+public:
+    struct Vertex {
+        C1 c1;
+        C2 c2;
+    };
+    vector<Vertex> datas_;
+};
+template<
+    typename C1
+>
+class CGLBuffer<C1>: public CGLBufferCommon<CGLBuffer<C1> >
+{
+public:
+    struct Vertex {
+        C1 c1;
+    };
+    vector<Vertex> datas_;
 };
 
 JADE_NS_END

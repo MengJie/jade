@@ -31,7 +31,7 @@
 
 #include "program.hpp"
 #include "shader.hpp"
-#include "buffer.hpp"
+#include "triangles.hpp"
 
 USING_JADE_NS
 
@@ -51,17 +51,14 @@ CApplication::CApplication()
         .method("compile", &CShader::compile)
         ;
 
-    LuaClass<CTrianglesBuffer>("TrianglesBuffer")
-        .method(LuaConstructor<CTrianglesBuffer, GLuint>())
-        .method("init", &CTrianglesBuffer::init)
-        .method("setPoint", &CTrianglesBuffer::setPoint)
+    LuaClass<CTriangles>("Triangles")
+        .method(LuaConstructor<CTriangles, CProgram*>())
+        .method("setPoint", &CTriangles::setPoint)
         ;
 
     lua.setGlobal("GL_VERTEX_SHADER", GL_VERTEX_SHADER);
     lua.setGlobal("GL_FRAGMENT_SHADER", GL_FRAGMENT_SHADER);
 }
-
-GLuint vao;
 
 void
 CGLFWApplication::keyCallback(GLFWwindow * window, int key, int scancode,
@@ -97,7 +94,7 @@ CGLFWApplication::init()
     if (!glfwInit())
         return false;
 
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    //glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -125,8 +122,8 @@ CGLFWApplication::init()
 
     lua.call("init");
 
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    //glGenVertexArrays(1, &vao);
+    //glBindVertexArray(vao);
 
     return true;
 }
@@ -146,19 +143,12 @@ CGLFWApplication::run()
 
         glViewport(0, 0, width, height);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-    CProgram * program = lua.getGlobal<CProgram *>("program");
-    CBuffer * buffer = lua.getGlobalUnchecked<CBuffer *>("buffer");
+        CTriangles * triangles = lua.getGlobal<CTriangles *>("triangles");
 
-    glUseProgram(program->getId());
-
-    buffer->enable();
-    buffer->draw();
-    buffer->disable();
-
-    glUseProgram(0);
+        triangles->draw();
 
         glfwSwapBuffers(window_);
         glfwPollEvents();

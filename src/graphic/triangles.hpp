@@ -24,32 +24,30 @@
 //
 //========================================================================
 
-#ifndef _JADE_INCLUDE_
-#define _JADE_INCLUDE_
+#ifndef _JADE_TRIANGLES_INCLUDE_
+#define _JADE_TRIANGLES_INCLUDE_
 
-#define JADE_NS_BEGIN namespace jade {
-#define JADE_NS_END }
-#define USING_JADE_NS using namespace jade;
+#include "jade.hpp"
+#include "object.hpp"
+#include "program.hpp"
+#include "buffer.hpp"
 
-//#define GLEW_STATIC
-#include <gl/glew.h>
-#include <glfw/glfw3.h>
-#include <glm/glm.hpp>
-#include <vector>
-#include <list>
-#include <set>
-#include <map>
-#include <string>
-#include <algorithm>
+JADE_NS_BEGIN
 
-#include "lua.hpp"
-#include "logger.hpp"
+class CTriangles: public CObject
+{
+public:
+    CTriangles(CProgram * program);
+    virtual ~CTriangles();
+    void draw();
+    void setPoint(int index, float x, float y, float z, float a);
+private:
+    CProgram * program_;
+    CGLBuffer<glm::vec4> buffer_;
+    GLuint location_;
+};
 
-typedef unsigned char u_char;
-typedef u_char byte;
-
-using namespace std;
-using namespace glm;
+JADE_NS_END
 
 #endif
 

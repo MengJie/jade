@@ -29,13 +29,10 @@ function init()
 
     program:link()
 
-    buffer = TrianglesBuffer(program:getAttribLocation("position"))
-
-    buffer:setPoint(0, 0.75, 0.75, 0, 1)
-    buffer:setPoint(1, 0.75, -0.75, 0, 1)
-    buffer:setPoint(2, -0.75, -0.75, 0, 1)
-
-    buffer:init()
+    triangles = Triangles(program)
+    triangles:setPoint(0, 0.75, 0.75, 0, 1)
+    triangles:setPoint(1, 0.75, -0.75, 0, 1)
+    triangles:setPoint(2, -0.75, -0.75, 0, 1)
 
     collectgarbage("collect")
     collectgarbage("collect")

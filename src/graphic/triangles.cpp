@@ -24,84 +24,43 @@
 //
 //========================================================================
 
-#include "buffer.hpp"
+#include "triangles.hpp"
 
 USING_JADE_NS
 
-CBuffer::CBuffer()
+CTriangles::CTriangles(CProgram * program)
 {
-    glGenBuffers(1, &id_);
+    program_ = program;
+    program_->retain();
+    buffer_.datas_.resize(3);
+    location_ = program->getAttribLocation("position");
 }
 
-CBuffer::~CBuffer()
+CTriangles::~CTriangles()
 {
-    if (0 != id_) {
-        glDeleteBuffers(1, &id_);
+    if (0 != program_) {
+        program_->release();
     }
 }
 
 void
-CBuffer::bindBuffer(GLenum target)
-{
-    glBindBuffer(target, id_);
-}
-
-void
-CBuffer::bufferData(GLenum target,
-        GLsizeiptr size,
-        const GLvoid * data,
-        GLenum usage)
-{
-    glBindBuffer(target, id_);
-    glBufferData(target, size, data, usage);
-    glBindBuffer(target, 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-CTrianglesBuffer::CTrianglesBuffer(GLuint location)
-    :positions_(3), location_(location)
-{
-}
-
-CTrianglesBuffer::~CTrianglesBuffer()
-{
-}
-
-bool
-CTrianglesBuffer::init()
-{
-    bufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*3, &positions_[0], GL_STATIC_DRAW);
-    return true;
-}
-
-void
-CTrianglesBuffer::enable()
-{
-    bindBuffer(GL_ARRAY_BUFFER);
+CTriangles::draw() {
+    glUseProgram(program_->getId());
+    buffer_.bind();
+    buffer_.update();
     glEnableVertexAttribArray(location_);
     glVertexAttribPointer(location_, 4, GL_FLOAT, GL_FALSE, 0, 0);
-}
-
-void
-CTrianglesBuffer::disable()
-{
-    glDisableVertexAttribArray(location_);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void
-CTrianglesBuffer::draw()
-{
     glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDisableVertexAttribArray(location_);
+    buffer_.unbind();
+    glUseProgram(0);
 }
 
 void
-CTrianglesBuffer::setPoint(int index, float x, float y, float z, float a)
-{
-    positions_[index].x = x;
-    positions_[index].y = y;
-    positions_[index].z = z;
-    positions_[index].a = a;
+CTriangles::setPoint(int index, float x, float y, float z, float a) {
+    buffer_.datas_[index].c1.x = x;
+    buffer_.datas_[index].c1.y = y;
+    buffer_.datas_[index].c1.z = z;
+    buffer_.datas_[index].c1.a = a;
 }
 
