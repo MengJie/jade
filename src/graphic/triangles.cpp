@@ -33,7 +33,8 @@ CTriangles::CTriangles(CProgram * program)
     program_ = program;
     program_->retain();
     buffer_.datas_.resize(3);
-    location_ = program->getAttribLocation("position");
+    position_ = program->getAttribLocation("a_position");
+    color_ = program_->getAttribLocation("a_color");
 }
 
 CTriangles::~CTriangles()
@@ -48,19 +49,37 @@ CTriangles::draw() {
     glUseProgram(program_->getId());
     buffer_.bind();
     buffer_.update();
-    glEnableVertexAttribArray(location_);
-    glVertexAttribPointer(location_, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glEnableVertexAttribArray(position_);
+    glEnableVertexAttribArray(color_);
+
+    glVertexAttribPointer(position_, 4, GL_FLOAT, GL_FALSE,
+        8*sizeof(float), 0);
+    glVertexAttribPointer(color_, 4, GL_FLOAT, GL_FALSE,
+        8*sizeof(float), (const void*)(4*sizeof(float)));
+
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDisableVertexAttribArray(location_);
+
+    glDisableVertexAttribArray(position_);
+    glDisableVertexAttribArray(color_);
+
     buffer_.unbind();
     glUseProgram(0);
 }
 
 void
-CTriangles::setPoint(int index, float x, float y, float z, float a) {
+CTriangles::setPoint(int index, float x, float y, float z, float w) {
     buffer_.datas_[index].c1.x = x;
     buffer_.datas_[index].c1.y = y;
     buffer_.datas_[index].c1.z = z;
-    buffer_.datas_[index].c1.a = a;
+    buffer_.datas_[index].c1.w = w;
+}
+
+void
+CTriangles::setColor(int index, float r, float g, float b, float a) {
+    buffer_.datas_[index].c2.r = r;
+    buffer_.datas_[index].c2.g = g;
+    buffer_.datas_[index].c2.b = b;
+    buffer_.datas_[index].c2.a = a;
 }
 

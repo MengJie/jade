@@ -40,11 +40,13 @@ public:
     CTriangles(CProgram * program);
     virtual ~CTriangles();
     void draw();
-    void setPoint(int index, float x, float y, float z, float a);
+    void setPoint(int index, float x, float y, float z, float w);
+    void setColor(int index, float r, float g, float b, float a);
 private:
     CProgram * program_;
-    CGLBuffer<glm::vec4> buffer_;
-    GLuint location_;
+    CGLBuffer<glm::vec4, glm::vec4> buffer_;
+    GLuint position_;
+    GLuint color_;
 };
 
 JADE_NS_END

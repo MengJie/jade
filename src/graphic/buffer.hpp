@@ -53,7 +53,7 @@ public:
         glBufferData(GL_ARRAY_BUFFER,
             sizeof(T::Vertex) * static_cast<T*>(this)->datas_.size(),
             &static_cast<T*>(this)->datas_[0],
-            GL_STATIC_DRAW);
+            GL_STREAM_DRAW);
     }
 protected:
     GLuint id_;

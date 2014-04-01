@@ -1,19 +1,40 @@
 
 local source = {
 [[
-    attribute vec4 position;
-    void main()
-    {
-        gl_Position = position;
-    }
+#ifndef GL_ES
+    #define highp
+    #define mediump
+    #define lowp
+#endif
+
+attribute   vec4 a_position;
+attribute   vec4 a_color;
+
+varying mediump vec4 v_color;
+
+void main()
+{
+    gl_Position = a_position;
+    v_color     = a_color;
+}
 ]],
 [[
-    void main()
-    {
-        mediump float lerpValue = gl_FragCoord.y / 500.0;
-        gl_FragColor = mix(vec4(1.0, 1.0, 1.0, 1.0),
-            vec4(0.2, 0.2, 0.2, 1.0), lerpValue);
-    }
+#ifndef GL_ES
+    #define highp
+    #define mediump
+    #define lowp
+#endif
+
+varying mediump vec4 v_color;
+
+void main()
+{
+    mediump float lerpValue = gl_FragCoord.y / 500.0;
+    gl_FragColor    = v_color;
+
+    //gl_FragColor = mix(vec4(1.0, 1.0, 1.0, 1.0),
+    //    vec4(0.2, 0.2, 0.2, 1.0), lerpValue);
+}
 ]]
 }
 
@@ -35,6 +56,10 @@ function init()
     triangles:setPoint(0, 0.75, 0.75, 0, 1)
     triangles:setPoint(1, 0.75, -0.75, 0, 1)
     triangles:setPoint(2, -0.75, -0.75, 0, 1)
+
+    triangles:setColor(0, 1, 0, 0, 1)
+    triangles:setColor(1, 0, 1, 0, 1)
+    triangles:setColor(2, 0, 0, 1, 1)
 
     collectgarbage("collect")
     collectgarbage("collect")
