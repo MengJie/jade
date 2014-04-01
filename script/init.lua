@@ -7,6 +7,8 @@ local source = {
     #define lowp
 #endif
 
+uniform     mat4 mvp_matrix;
+
 attribute   vec4 a_position;
 attribute   vec4 a_color;
 
@@ -14,7 +16,7 @@ varying mediump vec4 v_color;
 
 void main()
 {
-    gl_Position = a_position;
+    gl_Position = mvp_matrix * a_position;
     v_color     = a_color;
 }
 ]],
@@ -30,7 +32,8 @@ varying mediump vec4 v_color;
 void main()
 {
     mediump float lerpValue = gl_FragCoord.y / 500.0;
-    gl_FragColor    = v_color;
+    gl_FragColor    = mix(v_color,
+        vec4(0.0, 0.0, 0.0, 0.2), lerpValue);
 
     //gl_FragColor = mix(vec4(1.0, 1.0, 1.0, 1.0),
     //    vec4(0.2, 0.2, 0.2, 1.0), lerpValue);
@@ -53,9 +56,9 @@ function init()
     program:link()
 
     triangles = Triangles(program)
-    triangles:setPoint(0, 0.75, 0.75, 0, 1)
-    triangles:setPoint(1, 0.75, -0.75, 0, 1)
-    triangles:setPoint(2, -0.75, -0.75, 0, 1)
+    triangles:setPoint(0, 200, 200, 0, 1)
+    triangles:setPoint(1, 0, 0, 0, 1)
+    triangles:setPoint(2, 0, 200, 0, 1)
 
     triangles:setColor(0, 1, 0, 0, 1)
     triangles:setColor(1, 0, 1, 0, 1)

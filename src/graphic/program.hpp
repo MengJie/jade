@@ -41,7 +41,15 @@ public:
 
     bool addShader(CShader * shader);
     bool link();
-    GLuint getAttribLocation(const GLchar * name);
+    GLint getAttribLocation(const GLchar * name);
+    GLint getUniformLocation(const GLchar * name);
+
+    inline void use() {
+        glUseProgram(id_);
+    }
+    inline void unuse() {
+        glUseProgram(0);
+    }
 
 private:
     vector<CShader*> shaders_;

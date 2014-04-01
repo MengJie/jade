@@ -44,9 +44,11 @@ public:
     void setColor(int index, float r, float g, float b, float a);
 private:
     CProgram * program_;
-    CGLBuffer<glm::vec4, glm::vec4> buffer_;
+    CGLBuffer<vec4, vec4> buffer_;
     GLuint position_;
     GLuint color_;
+    GLuint mvp_;
+    mat4 mvp_matrix_;
 };
 
 JADE_NS_END

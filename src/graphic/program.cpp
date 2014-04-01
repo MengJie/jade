@@ -83,12 +83,22 @@ CProgram::link()
     return true;
 }
 
-GLuint
+GLint
 CProgram::getAttribLocation(const GLchar * name)
 {
-    GLuint location = glGetAttribLocation(id_, name);
+    GLint location = glGetAttribLocation(id_, name);
     if (-1 == location) {
         ERROR("Could not bind attribute: %s\n", name);
+    }
+    return location;
+}
+
+GLint
+CProgram::getUniformLocation(const GLchar * name)
+{
+    GLint location = glGetUniformLocation(id_, name);
+    if (-1 == location) {
+        ERROR("Could not bind uniform: %s\n", name);
     }
     return location;
 }

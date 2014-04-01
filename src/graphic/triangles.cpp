@@ -35,6 +35,8 @@ CTriangles::CTriangles(CProgram * program)
     buffer_.datas_.resize(3);
     position_ = program->getAttribLocation("a_position");
     color_ = program_->getAttribLocation("a_color");
+    mvp_ = program_->getUniformLocation("mvp_matrix");
+    mvp_matrix_ = ortho(0.0, 640.0, 480.0, 0.0);
 }
 
 CTriangles::~CTriangles()
@@ -46,9 +48,11 @@ CTriangles::~CTriangles()
 
 void
 CTriangles::draw() {
-    glUseProgram(program_->getId());
+    program_->use();
     buffer_.bind();
     buffer_.update();
+
+    glUniformMatrix4fv(mvp_, 1, GL_FALSE, &mvp_matrix_[0][0]);
 
     glEnableVertexAttribArray(position_);
     glEnableVertexAttribArray(color_);
@@ -64,7 +68,7 @@ CTriangles::draw() {
     glDisableVertexAttribArray(color_);
 
     buffer_.unbind();
-    glUseProgram(0);
+    program_->unuse();
 }
 
 void
