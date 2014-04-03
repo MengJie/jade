@@ -50,7 +50,6 @@ typedef unsigned char u_char;
 typedef u_char byte;
 
 using namespace std;
-using namespace glm;
 
 #endif
 

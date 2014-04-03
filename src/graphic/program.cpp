@@ -31,7 +31,9 @@
 USING_JADE_NS
 
 CProgram::CProgram()
-{ }
+{
+    id_ = glCreateProgram();
+}
 
 CProgram::~CProgram()
 {
@@ -54,8 +56,6 @@ CProgram::addShader(CShader * shader)
 bool
 CProgram::link()
 {
-    id_ = glCreateProgram();
-
     for (auto it = shaders_.begin();it!=shaders_.end(); ++it) {
         glAttachShader(id_, (*it)->getId());
     }

@@ -32,8 +32,10 @@ varying mediump vec4 v_color;
 void main()
 {
     mediump float lerpValue = gl_FragCoord.y / 500.0;
-    gl_FragColor    = mix(v_color,
-        vec4(0.0, 0.0, 0.0, 0.2), lerpValue);
+    gl_FragColor    = v_color;
+
+    //gl_FragColor    = mix(v_color,
+    //    vec4(0.0, 0.0, 0.0, 0.2), lerpValue);
 
     //gl_FragColor = mix(vec4(1.0, 1.0, 1.0, 1.0),
     //    vec4(0.2, 0.2, 0.2, 1.0), lerpValue);

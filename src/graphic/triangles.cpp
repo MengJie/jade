@@ -36,7 +36,7 @@ CTriangles::CTriangles(CProgram * program)
     position_ = program->getAttribLocation("a_position");
     color_ = program_->getAttribLocation("a_color");
     mvp_ = program_->getUniformLocation("mvp_matrix");
-    mvp_matrix_ = ortho(0.0, 640.0, 480.0, 0.0);
+    mvp_matrix_ = glm::ortho(0.0, 640.0, 480.0, 0.0);
 }
 
 CTriangles::~CTriangles()

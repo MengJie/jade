@@ -33,6 +33,7 @@ CShader::CShader(GLenum shaderType, const char * shaderSource)
 {
     type_ = shaderType;
     source_ = shaderSource;
+    id_ = glCreateShader(type_);
 }
 
 CShader::~CShader()
@@ -45,7 +46,6 @@ CShader::~CShader()
 bool
 CShader::compile()
 {
-    id_ = glCreateShader(type_);
     const char *source = source_.c_str();
     glShaderSource(id_, 1, &source, NULL);
 
