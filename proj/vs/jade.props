@@ -9,14 +9,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(JadeRoot)src\core;$(JadeRoot)src\lua;$(JadeRoot)src\utils;$(JadeRoot)src\graphic;$(JadeRoot)dep\glm\inc;$(JadeRoot)dep\glfw\inc;$(JadeRoot)dep\glew\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(JadeRoot)src\core;$(JadeRoot)src\lua;$(JadeRoot)src\utils;$(JadeRoot)src\graphic;$(JadeRoot)dep\glm\inc;$(JadeRoot)dep\glfw\inc;$(JadeRoot)dep\glew\inc;$(JadeRoot)dep\zlib\inc;$(JadeRoot)dep\libpng\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(JadeRoot)dep\glfw\lib\win32;$(JadeRoot)dep\glew\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(JadeRoot)dep\glfw\lib\win32;$(JadeRoot)dep\glew\lib\win32;$(JadeRoot)dep\libpng\lib\win32;$(JadeRoot)dep\zlib\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;zlib.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <SubSystem>Console</SubSystem>
