@@ -36,10 +36,12 @@ JADE_NS_BEGIN
 template<typename T>
 struct TLuaClassTraits {
     static string className_;
+    static string parentClassName_;
     static void push(lua_State *, T);
     static T to(lua_State *, int);
 };
-template<typename T> string TLuaClassTraits<T>::className_;
+template<typename T>
+string TLuaClassTraits<T>::className_;
 
 template<typename T>
 struct TLuaClassTraits<T*> {
@@ -55,7 +57,25 @@ struct TLuaClassTraits<T*> {
     }
     static T* to(lua_State *L, int index) {
         string & name = TLuaClassTraits<T>::className_;
-        T** a = static_cast<T**>(luaL_checkudata(L, -1, name.c_str()));
+        LuaStackBalancer_ balancer(L);
+        if (lua_getmetatable(L, index)) {
+            lua_getfield(L, -1, "__cname");
+            const char * derived = lua_tostring(L, -1);
+            if (0 == derived) {
+                lua_pop(L, 2);
+                return (T*)luaL_error(L, "type error");
+            }
+            CLuaInheritRelation & relation = CLuaInheritRelation::instance();
+            if (!relation.isDerivedFrom(derived, name)) {
+                lua_pop(L, 2);
+                return (T*)luaL_error(L, "inherit error");
+            }
+            lua_pop(L, 2);
+        }
+        T** a = static_cast<T**>(lua_touserdata(L, -1));
+        if (0 == a) {
+            return (T*)luaL_error(L, "not a userdata");
+        }
         T* obj = *a;
         return obj;
     }
@@ -214,10 +234,41 @@ private:
     }
 
 private:
-    CLuaState();
-    ~CLuaState();
+    CLuaState() {
+        L_ = luaL_newstate();
+        luaL_openlibs(L_);
+
+        if (luaL_dofile(L_, "init.lua")) {
+            ERROR("load lua init file failed: %s\n",
+                lua_tostring(L_, -1));
+        }
+    }
+    ~CLuaState() {
+        lua_close(L_);
+    }
 private:
     lua_State * L_;
+};
+
+class CLuaInheritRelation: public TSingleton<CLuaInheritRelation>
+{
+    friend TSingleton<CLuaInheritRelation>;
+public:
+    inline void addRelation(string derived, string base) {
+        relation_[derived] = base;
+    }
+    inline bool isDerivedFrom(string derived, string base) {
+        if (derived == base) return true;
+        if (relation_.find(derived) != relation_.end()) {
+            return relation_[derived] == base;
+        }
+        return false;
+    }
+private:
+    CLuaInheritRelation() {};
+    ~CLuaInheritRelation() {};
+private:
+    map<string, string> relation_;
 };
 
 JADE_NS_END

@@ -25,22 +25,6 @@
 //========================================================================
 
 #include "luastate.hpp"
-#include "logger.hpp"
 
 USING_JADE_NS
 
-CLuaState::CLuaState()
-{
-    L_ = luaL_newstate();
-    luaL_openlibs(L_);
-
-    if (luaL_dofile(L_, "init.lua")) {
-        ERROR("load lua init file failed: %s\n",
-            lua_tostring(L_, -1));
-    }
-}
-
-CLuaState::~CLuaState()
-{
-    lua_close(L_);
-}

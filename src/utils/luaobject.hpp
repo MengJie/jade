@@ -608,6 +608,10 @@ public:
         lua_pushcclosure(L_, &TLuaClassRegister<T>::gc, 1);
         lua_settable(L_, -3);
 
+        lua_pushstring(L_, "__cname");
+        lua_pushstring(L_, className_.c_str());
+        lua_settable(L_, -3);
+
         lua_pushstring(L_, "__index");
         lua_newtable(L_);
         lua_settable(L_, -3);
@@ -747,10 +751,15 @@ private:
     lua_State * L_;
 };
 
+
 template<typename T>
 TLuaClassRegister<T>&
-LuaClass(const char * name) {
+LuaClass(const char * name, const char * parent = nullptr) {
     TLuaClassTraits<T>::className_ = name;
+    if (parent != nullptr) {
+        CLuaInheritRelation & relation = CLuaInheritRelation::instance();
+        relation.addRelation(name, parent);
+    }
     return *(new TLuaClassRegister<T>(name));
 }
 
