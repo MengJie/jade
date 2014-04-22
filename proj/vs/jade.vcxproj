@@ -69,7 +69,6 @@
     <ClInclude Include="..\..\src\core\autoreleasepool.hpp" />
     <ClInclude Include="..\..\src\core\jade.hpp" />
     <ClInclude Include="..\..\src\core\logger.hpp" />
-    <ClInclude Include="..\..\src\core\luastate.hpp" />
     <ClInclude Include="..\..\src\core\object.hpp" />
     <ClInclude Include="..\..\src\graphic\buffer.hpp" />
     <ClInclude Include="..\..\src\graphic\globject.hpp" />
@@ -103,13 +102,13 @@
     <ClInclude Include="..\..\src\lua\lvm.h" />
     <ClInclude Include="..\..\src\lua\lzio.h" />
     <ClInclude Include="..\..\src\utils\luaobject.hpp" />
+    <ClInclude Include="..\..\src\utils\luastate.hpp" />
     <ClInclude Include="..\..\src\utils\singleton.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\core\application.cpp" />
     <ClCompile Include="..\..\src\core\autoreleasepool.cpp" />
     <ClCompile Include="..\..\src\core\logger.cpp" />
-    <ClCompile Include="..\..\src\core\luastate.cpp" />
     <ClCompile Include="..\..\src\core\object.cpp" />
     <ClCompile Include="..\..\src\entry\win32\main.cpp" />
     <ClCompile Include="..\..\src\graphic\globject.cpp" />

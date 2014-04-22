@@ -90,9 +90,6 @@
     <ClInclude Include="..\..\src\lua\lua.h">
       <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\luastate.hpp">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\jade.hpp">
       <Filter>core</Filter>
     </ClInclude>
@@ -131,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\graphic\triangles.hpp">
       <Filter>graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utils\luastate.hpp">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -231,9 +231,6 @@
       <Filter>lua</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\entry\win32\main.cpp" />
-    <ClCompile Include="..\..\src\core\luastate.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\logger.cpp">
       <Filter>core</Filter>
     </ClCompile>
